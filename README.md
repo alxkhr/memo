@@ -1,6 +1,5 @@
 # roadmap
 
-- seperate server
 - user
   - login
   - register (with private key?)
