@@ -1,0 +1,19 @@
+{
+  "name": "memo",
+  "version": "0.0.1",
+  "description": "A self-hosted note app",
+  "private": true,
+  "scripts": {
+    "server:build": "tsc --project ./server/tsconfig.json",
+    "server:run": "node server/dist/index.js"
+  },
+  "author": "Alexander Kehr",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.16",
+    "typescript": "^4.9.5"
+  }
+}
