@@ -1,6 +1,7 @@
 {
   "include": ["src/**/*"],
   "compilerOptions": {
+    "strict": true,
     "module": "CommonJS",
     "esModuleInterop": true,
     "outDir": "dist"

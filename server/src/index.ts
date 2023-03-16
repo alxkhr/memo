@@ -13,10 +13,11 @@ app.use((req, res, next) => {
 
 // use memoRouter for the host "memo"
 app.use((req, res, next) => {
-  if (req.headers.host.includes(process.env.MEMO_HOST)) {
+  if (req.headers.host?.includes(process.env.MEMO_HOST || "")) {
     memoRouter(req, res, next);
   } else {
-    next();
+    // next(); // for more applications
+    res.sendStatus(404);
   }
 });
 
