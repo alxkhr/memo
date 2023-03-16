@@ -5,10 +5,18 @@ import { memoRouter } from "./memo";
 const app = express();
 dotenv.config();
 
-// a middleware that will log the request
+// a middleware that will log the request and the response
 app.use((req, res, next) => {
-  console.log("Request:", req.method, req.headers.host, req.url);
   next();
+  console.log(
+    new Date().toLocaleString(),
+    " >>> ",
+    req.method,
+    req.headers.host || "no host",
+    req.url,
+    " >>> ",
+    res.statusCode
+  );
 });
 
 // use memoRouter for the host "memo"
