@@ -1,4 +1,6 @@
 import express from "express";
+import bodyParser from "body-parser";
+import { userRouter } from "./user";
 const path = require("path");
 
 // a router for the host "memo"
@@ -16,3 +18,9 @@ memoRouter.use(express.static(path.join(__dirname, "../../client/dist")));
 memoRouter.get("/app(/*)?", (req, res) => {
   res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
 });
+
+const apiRouter = express.Router();
+memoRouter.use("/api", apiRouter);
+apiRouter.use(bodyParser.json());
+apiRouter.use(bodyParser.urlencoded({ extended: true }));
+apiRouter.use("/user", userRouter);
