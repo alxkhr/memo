@@ -1,5 +1,10 @@
 import React from "react";
+import { Router } from "./router";
 
 export function App() {
-  return <div>App</div>;
+  return (
+    <React.StrictMode>
+      <Router />
+    </React.StrictMode>
+  );
 }
