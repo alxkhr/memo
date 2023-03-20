@@ -17,5 +17,5 @@ userRouter.post("/create", (req, res) => {
   // check if username already exists
   // if not, insert the new user into the database
   // close database connection
-  res.send(200);
+  res.json({ user: { username }, token: `token-${username}` });
 });
