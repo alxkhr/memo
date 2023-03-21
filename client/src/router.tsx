@@ -1,9 +1,11 @@
 import React from "react";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ConnectRoute } from "./connect/connect-route";
+import { ConnectScreen } from "./connect/connect-screen";
 import { ErrorScreen } from "./error-screen";
 import { MainScreen } from "./main-screen";
+import { LoginScreen } from "./connect/login-screen";
+import { RegisterScreen } from "./connect/register-screen";
 
 const router = createBrowserRouter([
   {
@@ -13,7 +15,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/connect",
-    element: <ConnectRoute />,
+    element: <ConnectScreen />,
+  },
+  {
+    path: "/register",
+    element: <RegisterScreen />,
+  },
+  {
+    path: "/login",
+    element: <LoginScreen />,
   },
 ]);
 

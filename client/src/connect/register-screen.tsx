@@ -1,25 +1,21 @@
 import React from "react";
 import { useStore } from "../store";
-import { User } from "./user";
+import { requestRegister } from "./connect-api";
+import { useNavigate } from "react-router-dom";
 
 export function RegisterScreen() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [key, setKey] = React.useState("");
-  const login = useStore((state) => state.login);
-  async function register(event: React.MouseEvent<HTMLButtonElement>) {
+  const { login } = useStore();
+  const navigate = useNavigate();
+  async function onCreate(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-    const body = { username, password, deviceId: "d", key };
-    const response = await fetch("/api/user/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    const { user, token }: { user: User; token: string } =
-      await response.json();
+    // TODO prevent empty username or password
+    // TODO prevent register while registering
+    const { user, token } = await requestRegister(username, password, key);
     login(user, token);
+    navigate("/");
   }
   return (
     <div>
@@ -45,7 +41,7 @@ export function RegisterScreen() {
         <br />
         <input id="key" value={key} onChange={(e) => setKey(e.target.value)} />
         <br />
-        <button onClick={register}>Create Account</button>
+        <button onClick={onCreate}>Create Account</button>
       </form>
     </div>
   );
