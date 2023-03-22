@@ -1,5 +1,6 @@
 # roadmap
 
+- database & encryption
 - user
   - login
   - register (with private key?)
@@ -11,5 +12,4 @@
   - edit
   - read
   - plan for tags
-- https
 - offline & sync
