@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { userRouter } from "./user";
+
 const path = require("path");
 
 // a router for the host "memo"
