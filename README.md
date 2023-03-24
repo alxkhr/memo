@@ -1,6 +1,7 @@
 # roadmap
 
-- database & encryption
+- token in authorization header
+- refresh token
 - user
   - login
   - register (with private key?)
