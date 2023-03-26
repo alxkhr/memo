@@ -1,12 +1,12 @@
 import React, { Suspense } from "react";
-import { useStore } from "../store";
 import { requestLogin } from "./connect-api";
 import { useNavigate } from "react-router-dom";
+import { useConnectStore } from "./connect-store";
 
 export function LoginScreen() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const { login } = useStore();
+  const { login } = useConnectStore();
   const navigate = useNavigate();
   async function onLogin(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();

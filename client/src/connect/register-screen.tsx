@@ -1,13 +1,13 @@
 import React from "react";
-import { useStore } from "../store";
 import { requestRegister } from "./connect-api";
 import { useNavigate } from "react-router-dom";
+import { useConnectStore } from "./connect-store";
 
 export function RegisterScreen() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [key, setKey] = React.useState("");
-  const { login } = useStore();
+  const { login } = useConnectStore();
   const navigate = useNavigate();
   async function onCreate(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();

@@ -1,9 +1,8 @@
 import React from "react";
-import { useStore } from "../store";
+import { useConnectStore } from "./connect-store";
 
 export function ConnectScreen() {
-  const user = useStore((state) => state.user);
-  const logout = useStore((state) => state.logout);
+  const { user, logout } = useConnectStore();
   return user ? (
     <div>
       <h1>Connected</h1>
