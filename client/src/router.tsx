@@ -3,14 +3,15 @@ import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ConnectScreen } from "./connect/connect-screen";
 import { ErrorScreen } from "./error-screen";
-import { MainScreen } from "./main-screen";
 import { LoginScreen } from "./connect/login-screen";
 import { RegisterScreen } from "./connect/register-screen";
+import { MemoScreen } from "./memo/memo-screen";
+import { MemoListScreen } from "./memo/memo-list-screen";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainScreen />,
+    element: <MemoListScreen />,
     errorElement: <ErrorScreen />,
   },
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginScreen />,
+  },
+  {
+    path: "/note/:id",
+    element: <MemoScreen />,
   },
 ]);
 
