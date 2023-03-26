@@ -1,5 +1,6 @@
 import React from "react";
 import { useConnectStore } from "./connect-store";
+import { Link } from "react-router-dom";
 
 export function ConnectScreen() {
   const { user, logout } = useConnectStore();
@@ -13,8 +14,8 @@ export function ConnectScreen() {
     <div>
       <h1>Not Connected</h1>
       <p>
-        <a href="/register">Register</a>&nbsp;or&nbsp;
-        <a href="/login">log in</a>.
+        <Link to="/register">Register</Link>&nbsp;or&nbsp;
+        <Link to="/login">log in</Link>.
       </p>
     </div>
   );

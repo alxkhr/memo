@@ -1,5 +1,6 @@
 import React from "react";
 import { useMemoStore } from "./memo-store";
+import { Link } from "react-router-dom";
 
 export function MemoListScreen() {
   const { memos } = useMemoStore();
@@ -9,7 +10,7 @@ export function MemoListScreen() {
       <ul>
         {memos.map((memo) => (
           <li key={memo.id}>
-            {memo.content}&nbsp;<a href={`/note/${memo.id}`}>edit</a>
+            {memo.content}&nbsp;<Link to={`/note/${memo.id}`}>edit</Link>
           </li>
         ))}
       </ul>
