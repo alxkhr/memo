@@ -1,16 +1,10 @@
 # roadmap
 
+- sync/merge client and server database
 - token in authorization header
 - refresh token
-- user
-  - login
-  - register (with private key?)
-  - persist (how to persist password?)
-  - request token / sso
-  - two-factor / associated devices
-- notes
-  - create
-  - edit
-  - read
-  - plan for tags
-- offline & sync
+- tag insert support
+- search for tags in list
+- design
+- pwa for offline
+- two-factor login / associated devices
