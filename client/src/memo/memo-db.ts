@@ -1,6 +1,4 @@
-import { Memo } from './memo';
-
-type StoredMemo = Memo & { deleted: boolean };
+import { Memo, StoredMemo } from '../../../shared/src/memo';
 
 const DB_NAME = 'memo';
 const STORE_NAME = 'memo';
@@ -32,6 +30,13 @@ export async function storeMemo(memo: Memo) {
   store.put({ ...memo, deleted: false });
 }
 
+export async function syncMemos(memos: StoredMemo[]) {
+  const db = await connect();
+  const transaction = db.transaction(STORE_NAME, 'readwrite');
+  const store = transaction.objectStore(STORE_NAME);
+  memos.forEach(store.put);
+}
+
 export async function getMemos(): Promise<Memo[]> {
   const db = await connect();
   const transaction = db.transaction(STORE_NAME, 'readonly');
@@ -55,7 +60,6 @@ export async function deleteMemo(id: string) {
   request.onsuccess = (event) => {
     const memo = (event as Event & { target: { result: StoredMemo } }).target
       .result;
-    memo.deleted = true;
-    store.put(memo);
+    store.put({ ...memo, deleted: true, updatedAt: new Date().toISOString() });
   };
 }

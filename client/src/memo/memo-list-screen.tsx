@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 export function MemoListScreen() {
   const navigate = useNavigate();
-  const { memos, deleteMemo } = useMemoStore();
+  const { memos, removeMemo } = useMemoStore();
   return (
     <div>
       <h1>Memos</h1>
@@ -14,7 +14,7 @@ export function MemoListScreen() {
             {memo.content}&nbsp;
             <button onClick={() => navigate(`/note/${memo.id}`)}>edit</button>
             &nbsp;
-            <button onClick={() => deleteMemo(memo.id)}>delete</button>
+            <button onClick={() => removeMemo(memo.id)}>delete</button>
           </li>
         ))}
       </ul>
