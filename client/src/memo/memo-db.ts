@@ -35,7 +35,9 @@ export async function storeSyncedMemos(memos: SyncedMemo[]) {
   const db = await connect();
   const transaction = db.transaction(STORE_NAME, 'readwrite');
   const store = transaction.objectStore(STORE_NAME);
-  memos.forEach(store.put);
+  for (const memo of memos) {
+    store.put(memo);
+  }
 }
 
 export async function getRawMemos(): Promise<StoredMemo[]> {
