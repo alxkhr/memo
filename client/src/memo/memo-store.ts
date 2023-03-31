@@ -6,9 +6,10 @@ import {
   deleteMemo,
   storeMemo,
   getMemos,
-  syncMemos,
   getRawMemos,
+  storeSyncedMemos,
 } from './memo-db';
+import { syncMemos } from './memo-api';
 
 const LAST_SYNC_KEY = 'lastSync';
 
@@ -52,30 +53,18 @@ export const memoStore = createStore<MemoStore>((set, get) => {
       // get memos from indexedDB because of deleted memos
       const storedMemos = await getRawMemos();
       const lastSync = localStorage.getItem(LAST_SYNC_KEY);
-      const bodyJson = {
-        newMemos: storedMemos.filter(
-          (memo) => !lastSync || memo.updatedAt > lastSync,
-        ) as SyncedMemo[],
-        lastSync,
-      };
+      let newMemos: SyncedMemo[] | undefined;
       try {
-        // TODO maybe receive new token from server
-        const resultBodyJson = await fetch('/api/memo/sync', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          body: JSON.stringify(bodyJson),
-        }).then((r) => r.json() as Promise<{ newMemos: SyncedMemo[] }>);
-        await syncMemos(resultBodyJson.newMemos);
-        const newMemoState = await getMemos();
-        // TODO what happens if deleted memo is opened?
-        set(() => ({ memos: newMemoState }));
-        localStorage.setItem(LAST_SYNC_KEY, time);
+        newMemos = (await syncMemos(storedMemos, lastSync)).newMemos;
       } catch (e) {
+        // TODO handle error
         console.error(e);
       }
+      await storeSyncedMemos(newMemos!);
+      const newMemoState = await getMemos();
+      // TODO what happens if deleted memo is opened?
+      set(() => ({ memos: newMemoState }));
+      localStorage.setItem(LAST_SYNC_KEY, time);
     },
   };
 });

@@ -3,6 +3,19 @@ import jwt from 'jsonwebtoken';
 import { pgPool } from '../db';
 import { StoredMemo, SyncedMemo } from './memo';
 
+function isSyncRequest(
+  body: unknown,
+): body is { lastSync: string | null; newMemos: SyncedMemo[] } {
+  return (
+    Boolean(body) &&
+    typeof body === 'object' &&
+    'lastSync' in body! &&
+    (body.lastSync === null || typeof body.lastSync === 'string') &&
+    'newMemos' in body! &&
+    Array.isArray(body.newMemos)
+  );
+}
+
 export const syncHandler: RequestHandler = async (req, res) => {
   let username: string | undefined;
   try {
@@ -11,32 +24,24 @@ export const syncHandler: RequestHandler = async (req, res) => {
     res.status(401).send('Invalid token');
     return;
   }
-  const client = await pgPool.connect();
-  let userId: number | undefined;
-  try {
-    const result = await client.query(
-      'SELECT * FROM users WHERE username = $1',
-      [username],
-    );
-    if (result.rows.length === 0) {
-      res.status(401).send('Invalid token');
-      return;
-    }
-    userId = result.rows[0].id;
-  } catch (e) {
-    console.error(e);
-    res.status(500).send('Internal server error');
-    return;
-  } finally {
-    client.release();
-  }
-  if (!req.body || !req.body.lastSync || !req.body.newMemos) {
+  if (!isSyncRequest(req.body)) {
     res.status(400).send('Invalid request');
     return;
   }
-  const { lastSync } = req.body;
+  const lastSync = req.body.lastSync || '1970-01-01T00:00:00.000Z';
+  const client = await pgPool.connect();
+  let userId: number | undefined;
   try {
-    const result = await client.query<StoredMemo>(
+    let dbResult = await client.query(
+      'SELECT * FROM users WHERE username = $1',
+      [username],
+    );
+    if (dbResult.rows.length === 0) {
+      res.status(401).send('Invalid token');
+      return;
+    }
+    userId = dbResult.rows[0].id;
+    dbResult = await client.query<StoredMemo>(
       'SELECT * FROM memos WHERE user_id = $1 AND updated_at > $2',
       [userId, lastSync],
     );
@@ -46,14 +51,14 @@ export const syncHandler: RequestHandler = async (req, res) => {
     const memosToUpdate: SyncedMemo[] = [];
     const memosToSend: SyncedMemo[] = [];
     for (const memo of req.body.newMemos) {
-      const serverMemo = result.rows.find((m) => m.id === memo.id);
+      const serverMemo = dbResult.rows.find((m) => m.id === memo.id);
       if (!serverMemo || serverMemo.updated_at <= memo.updatedAt) {
         memosToUpdate.push(memo);
       } else if (serverMemo.updated_at > memo.updatedAt) {
         memosToSend.push(mapServerMemo(serverMemo));
       }
     }
-    for (const serverMemo of result.rows) {
+    for (const serverMemo of dbResult.rows) {
       if (!req.body.newMemos.find((m: SyncedMemo) => m.id === serverMemo.id)) {
         memosToSend.push(mapServerMemo(serverMemo));
       }

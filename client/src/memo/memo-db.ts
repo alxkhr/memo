@@ -31,7 +31,7 @@ export async function storeMemo(memo: Memo) {
   store.put({ ...memo, deleted: false });
 }
 
-export async function syncMemos(memos: SyncedMemo[]) {
+export async function storeSyncedMemos(memos: SyncedMemo[]) {
   const db = await connect();
   const transaction = db.transaction(STORE_NAME, 'readwrite');
   const store = transaction.objectStore(STORE_NAME);
