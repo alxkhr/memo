@@ -4,7 +4,7 @@ import { User } from './user';
 
 const USER_KEY = 'user';
 const TOKEN_KEY = 'token';
-const SYNC_INTERVAL = 1000; // 1000 * 60 * 2; // 2 minutes
+const SYNC_INTERVAL = 1000 * 60 * 2; // 2 minutes
 
 interface ConnectStore {
   user: User | null;
