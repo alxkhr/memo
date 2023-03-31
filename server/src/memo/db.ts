@@ -1,7 +1,9 @@
 import { pgPool } from '../db';
 
 export async function createMemosTable() {
+  // TODO remove drop table
   const query = `
+    DROP TABLE IF EXISTS memos;
     CREATE TABLE IF NOT EXISTS memos (
       id VARCHAR(255) NOT NULL,
       user_id INTEGER NOT NULL,

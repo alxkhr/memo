@@ -1,75 +1,84 @@
 import { useStore } from 'zustand';
 import { createStore } from 'zustand/vanilla';
-import { Memo, StoredMemo } from '../../../shared/src/memo';
-import { deleteMemo, storeMemo, getMemos, syncMemos } from './memo-db';
+import { Memo } from './memo';
+import { SyncedMemo } from '../../../server/src/memo/memo';
+import {
+  deleteMemo,
+  storeMemo,
+  getMemos,
+  syncMemos,
+  getRawMemos,
+} from './memo-db';
 
 const LAST_SYNC_KEY = 'lastSync';
-const SYNC_INTERVAL = 1000; // 1000 * 60 * 2; // 2 minutes
 
 interface MemoStore {
-  memos: Memo[];
+  memos: Memo[] | null;
   addMemo: (memo: Memo) => void;
   removeMemo: (id: string) => void;
   updateMemo: (memo: Memo) => void;
   syncMemos: () => Promise<void>;
 }
 
-const memoStore = createStore<MemoStore>((set, get) => ({
-  memos: [],
-  setMemos: (memos: Memo[]) => set({ memos }),
-  addMemo: (memo: Memo) => {
-    storeMemo(memo);
-    set((state) => ({ memos: [...state.memos, memo] }));
-  },
-  removeMemo: (id: string) => {
-    deleteMemo(id);
-    set((state) => ({
-      memos: state.memos.filter((memo) => memo.id !== id),
-    }));
-  },
-  updateMemo: (memo: Memo) => {
-    storeMemo(memo);
-    set((state) => ({
-      memos: state.memos.map((m) => (m.id === memo.id ? memo : m)),
-    }));
-  },
-  syncMemos: async () => {
-    const time = new Date().toISOString();
-    // get memos from indexedDB because of deleted memos
-    const storedMemos = await getMemos();
-    const lastSync = localStorage.getItem(LAST_SYNC_KEY);
-    const bodyJson = {
-      newMemos: storedMemos.filter(
-        (memo) => !lastSync || memo.updatedAt > lastSync,
-      ),
-      lastSync,
-    };
-    try {
-      // TODO maybe receive new token from server
-      const resultBodyJson = await fetch('/api/memo/sync', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify(bodyJson),
-      }).then((r) => r.json() as Promise<{ newMemos: StoredMemo[] }>);
-      await syncMemos(resultBodyJson.newMemos);
-      const newMemoState = await getMemos();
-      // TODO what happens if deleted memo is opened?
-      set(() => ({ memos: newMemoState }));
-      localStorage.setItem(LAST_SYNC_KEY, time);
-    } catch (e) {
-      console.error(e);
+export const memoStore = createStore<MemoStore>((set, get) => {
+  getMemos().then((memos) => set({ memos }));
+  function setIfInitialized(...args: Parameters<typeof set>) {
+    if (!get().memos) {
+      throw new Error('Memos are not initialized');
     }
-  },
-}));
-
-(async function () {
-  const memos = await getMemos();
-  memoStore.setState({ memos });
-  setInterval(() => memoStore.getState().syncMemos(), SYNC_INTERVAL);
-})();
+    return set(...args);
+  }
+  return {
+    memos: [],
+    setMemos: (memos: Memo[]) => set({ memos }),
+    addMemo: (memo: Memo) => {
+      storeMemo(memo);
+      setIfInitialized((state) => ({ memos: [...state.memos!, memo] }));
+    },
+    removeMemo: (id: string) => {
+      deleteMemo(id);
+      setIfInitialized((state) => ({
+        memos: state.memos!.filter((memo) => memo.id !== id),
+      }));
+    },
+    updateMemo: (memo: Memo) => {
+      storeMemo(memo);
+      setIfInitialized((state) => ({
+        memos: state.memos!.map((m) => (m.id === memo.id ? memo : m)),
+      }));
+    },
+    syncMemos: async () => {
+      const time = new Date().toISOString();
+      // get memos from indexedDB because of deleted memos
+      const storedMemos = await getRawMemos();
+      const lastSync = localStorage.getItem(LAST_SYNC_KEY);
+      const bodyJson = {
+        newMemos: storedMemos.filter(
+          (memo) => !lastSync || memo.updatedAt > lastSync,
+        ) as SyncedMemo[],
+        lastSync,
+      };
+      try {
+        // TODO maybe receive new token from server
+        const resultBodyJson = await fetch('/api/memo/sync', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          body: JSON.stringify(bodyJson),
+        }).then((r) => r.json() as Promise<{ newMemos: SyncedMemo[] }>);
+        await syncMemos(resultBodyJson.newMemos);
+        const newMemoState = await getMemos();
+        // TODO what happens if deleted memo is opened?
+        set(() => ({ memos: newMemoState }));
+        localStorage.setItem(LAST_SYNC_KEY, time);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+  };
+});
 
 export function useMemoStore() {
   return useStore(memoStore);

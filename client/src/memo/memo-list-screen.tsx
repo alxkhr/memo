@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 export function MemoListScreen() {
   const navigate = useNavigate();
   const { memos, removeMemo } = useMemoStore();
+  if (!memos) {
+    return <div>Loading...</div>; // TODO loading component
+  }
   return (
     <div>
       <h1>Memos</h1>

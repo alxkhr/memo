@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
 import { pgPool } from '../db';
-import { StoredMemo, StoredServerMemo } from '../../../shared/src/memo';
+import { StoredMemo, SyncedMemo } from './memo';
 
 export const syncHandler: RequestHandler = async (req, res) => {
   let username: string | undefined;
@@ -36,15 +36,15 @@ export const syncHandler: RequestHandler = async (req, res) => {
   }
   const { lastSync } = req.body;
   try {
-    const result = await client.query<StoredServerMemo>(
+    const result = await client.query<StoredMemo>(
       'SELECT * FROM memos WHERE user_id = $1 AND updated_at > $2',
       [userId, lastSync],
     );
     // compare newMemos with req.body.newMemos
     // if server has newer memos, send them to client
     // if client has newer memos, update server
-    const memosToUpdate: StoredMemo[] = [];
-    const memosToSend: StoredMemo[] = [];
+    const memosToUpdate: SyncedMemo[] = [];
+    const memosToSend: SyncedMemo[] = [];
     for (const memo of req.body.newMemos) {
       const serverMemo = result.rows.find((m) => m.id === memo.id);
       if (!serverMemo || serverMemo.updated_at <= memo.updatedAt) {
@@ -54,7 +54,7 @@ export const syncHandler: RequestHandler = async (req, res) => {
       }
     }
     for (const serverMemo of result.rows) {
-      if (!req.body.newMemos.find((m: StoredMemo) => m.id === serverMemo.id)) {
+      if (!req.body.newMemos.find((m: SyncedMemo) => m.id === serverMemo.id)) {
         memosToSend.push(mapServerMemo(serverMemo));
       }
     }
@@ -95,7 +95,7 @@ export const syncHandler: RequestHandler = async (req, res) => {
   }
 };
 
-function mapServerMemo(serverMemo: StoredServerMemo): StoredMemo {
+function mapServerMemo(serverMemo: StoredMemo): SyncedMemo {
   const { user_id, updated_at, created_at, ...rest } = serverMemo;
   return {
     ...rest,

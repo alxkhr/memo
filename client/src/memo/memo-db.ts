@@ -1,4 +1,5 @@
-import { Memo, StoredMemo } from '../../../shared/src/memo';
+import { SyncedMemo } from '../../../server/src/memo/memo';
+import { Memo, StoredMemo } from './memo';
 
 const DB_NAME = 'memo';
 const STORE_NAME = 'memo';
@@ -30,11 +31,26 @@ export async function storeMemo(memo: Memo) {
   store.put({ ...memo, deleted: false });
 }
 
-export async function syncMemos(memos: StoredMemo[]) {
+export async function syncMemos(memos: SyncedMemo[]) {
   const db = await connect();
   const transaction = db.transaction(STORE_NAME, 'readwrite');
   const store = transaction.objectStore(STORE_NAME);
   memos.forEach(store.put);
+}
+
+export async function getRawMemos(): Promise<StoredMemo[]> {
+  const db = await connect();
+  const transaction = db.transaction(STORE_NAME, 'readonly');
+  const store = transaction.objectStore(STORE_NAME);
+  const request = store.getAll();
+  return new Promise((resolve, reject) => {
+    request.onsuccess = (event) => {
+      const memos = (event as Event & { target: { result: StoredMemo[] } })
+        .target.result;
+      resolve(memos);
+    };
+    request.onerror = (e) => reject(e);
+  });
 }
 
 export async function getMemos(): Promise<Memo[]> {
