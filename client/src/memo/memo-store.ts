@@ -30,7 +30,7 @@ export const memoStore = createStore<MemoStore>((set, get) => {
     return set(...args);
   }
   return {
-    memos: [],
+    memos: null,
     setMemos: (memos: Memo[]) => set({ memos }),
     addMemo: (memo: Memo) => {
       storeMemo(memo);

@@ -11,6 +11,7 @@
   "author": "Alexander Kehr",
   "license": "MIT",
   "dependencies": {
+    "antd": "^5.3.3",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "dotenv": "^16.0.3",
