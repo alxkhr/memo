@@ -2,22 +2,13 @@ import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { ErrorScreen } from '../error-screen';
 import { useMemoStore } from './memo-store';
-import { Mentions } from 'antd';
+import { useTags } from '../tag/use-tags';
+import { TextareaWithTags } from '../tag/textarea-with-tags';
 
 export function MemoScreen() {
   const { id } = useParams<{ id: string }>();
   const { memos, addMemo, updateMemo } = useMemoStore();
-  const existingTags = useMemo(() => {
-    if (!memos) {
-      return [];
-    }
-    const allTags = memos
-      .map((m) => m.content.match(/#(\w+)/g))
-      .flat()
-      .filter((t) => t !== null)
-      .map((t) => t!.slice(1));
-    return [...new Set(allTags)].map((t) => ({ value: t, label: t }));
-  }, [memos === null, id]);
+  const tags = useTags(memos, [memos === null, id]);
   if (!id) {
     return <ErrorScreen />;
   }
@@ -41,15 +32,23 @@ export function MemoScreen() {
   // TODO fix error when creating a new tag
   // TODO split mentions on more than just space (i.e. enter, comma, etc.)
   // TODO highlight mentions
+  // a regex that splits every word
+  // const regex = /[^\w|#]/;
   return (
     <div>
-      <Mentions
+      {/* <Mentions
         value={memo?.content || ''}
         onChange={onChangeContent}
         prefix={'#'}
-        options={existingTags}
+        options={tags}
         autoSize
-        notFoundContent={null}
+        notFoundContent={<p>new...</p>}
+        split={regex as unknown as string}
+      /> */}
+      <TextareaWithTags
+        value={memo?.content || ''}
+        setValue={onChangeContent}
+        tags={tags}
       />
     </div>
   );
