@@ -18,7 +18,8 @@
 
 - pwa for offline
 - support more content types (links, drawings, photos, todo-list)
-- support more search stategies (lost notes in a calender?)
+- support more search/filter/sort/visualize stategies (lost notes in a calender?)
+- save searches & "dashboard" / most used searches
 - support bulk operations (ie. for a whole search result list)
 - two-factor login / associated devices
 - test automation
