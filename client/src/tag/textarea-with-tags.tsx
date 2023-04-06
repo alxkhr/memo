@@ -1,4 +1,6 @@
 import React from 'react';
+import css from './textarea-with-tags.m.css';
+import { useAutoResizeTextarea } from './use-auto-resize-textarea';
 
 interface Props {
   value: string;
@@ -10,27 +12,45 @@ interface TagSupport {
   position: number;
   text: string;
   selected: number;
+  coords?: { x: number; y: number };
 }
 
 export function TextareaWithTags(props: Props) {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const [tagSupport, setTagSupport] = React.useState<TagSupport | null>(null);
+  useAutoResizeTextarea(textareaRef, props.value);
   // TODO show more suggestions, not just the ones that start with the text
   const suggestedTags =
     tagSupport !== null
       ? props.tags.filter((tag) => tag.startsWith(tagSupport.text))
       : [];
-  const isSupportActivce = tagSupport !== null && suggestedTags.length > 0;
+  const showSuggestions = tagSupport !== null && suggestedTags.length > 0;
+
   function onCaretPositionChanged(
     event: React.SyntheticEvent<HTMLTextAreaElement>,
   ) {
     const caretPosition = (event.target as HTMLTextAreaElement).selectionStart;
-    const support = getSupportIfCaretInTag(props.value, caretPosition);
-    console.log(support);
+    const support = getSupportIfCaretInTag(caretPosition);
     setTagSupport(support);
   }
+
+  function getSupportIfCaretInTag(caretPosition: number): TagSupport | null {
+    let i = caretPosition - 1;
+    let c = '';
+    // TODO use .test instead of .match
+    while (i >= 0 && (c = props.value.charAt(i)).match(/\w/)) {
+      i--;
+    }
+    if (c !== '#') {
+      return null;
+    }
+    const position = i + 1;
+    const text = /(\w+)/.exec(props.value.substring(position))?.[0] || '';
+    return { position, text, selected: 0 };
+  }
+
   function onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (!isSupportActivce) {
+    if (!showSuggestions) {
       return;
     }
     switch (event.key) {
@@ -74,17 +94,76 @@ export function TextareaWithTags(props: Props) {
         break;
     }
   }
+
+  function setSupportCoords(ref: HTMLSpanElement | null) {
+    if (!ref || !tagSupport) {
+      return;
+    }
+    const rect = ref.getBoundingClientRect();
+    if (
+      tagSupport.coords?.x === rect.left &&
+      tagSupport.coords?.y === rect.top
+    ) {
+      return;
+    }
+    setTagSupport((support) =>
+      support ? { ...support, coords: { x: rect.left, y: rect.top } } : null,
+    );
+  }
+
+  function renderTextareaMarker() {
+    let textIndex = 0;
+    const splitValue = props.value.split(/(#\w*)/g);
+    return splitValue.map((t) => {
+      const isTag = t.startsWith('#');
+      const isActiveTag =
+        isTag &&
+        tagSupport !== null &&
+        textIndex <= tagSupport.position &&
+        textIndex + t.length >= tagSupport.position;
+      textIndex += t.length;
+      if (!isTag) {
+        return t;
+      }
+      const className = isActiveTag ? css.active : css.marker;
+      return (
+        <span
+          key={textIndex}
+          className={className}
+          ref={isActiveTag ? setSupportCoords : undefined}
+        >
+          {t}
+        </span>
+      );
+    });
+  }
+
   return (
     <>
-      <textarea
-        ref={textareaRef}
-        value={props.value}
-        onChange={(e) => props.setValue(e.target.value)}
-        onSelect={onCaretPositionChanged}
-        onKeyDown={onKeyDown}
-      />
-      {isSupportActivce && ( // TODO use a portal and/or own component
-        <ul>
+      <div className={css.container}>
+        {/* TODO make own component for copy */}
+        <div className={css.copy}>{renderTextareaMarker()}</div>
+        <textarea
+          className={css.textarea}
+          ref={textareaRef}
+          value={props.value}
+          onChange={(e) => props.setValue(e.target.value)}
+          onSelect={onCaretPositionChanged}
+          onKeyDown={onKeyDown}
+        />
+      </div>
+      {showSuggestions && ( // TODO use a portal and/or own component
+        <ul
+          className={css.suggestions}
+          style={
+            tagSupport?.coords
+              ? {
+                  left: tagSupport.coords.x,
+                  top: tagSupport.coords.y,
+                }
+              : undefined
+          }
+        >
           {suggestedTags.map((t, i) => (
             <li
               key={t}
@@ -101,22 +180,4 @@ export function TextareaWithTags(props: Props) {
       )}
     </>
   );
-}
-
-function getSupportIfCaretInTag(
-  value: string,
-  caretPosition: number,
-): TagSupport | null {
-  let i = caretPosition - 1;
-  let c = '';
-  // TODO use .test instead of .match
-  while (i >= 0 && (c = value.charAt(i)).match(/\w/)) {
-    i--;
-  }
-  if (c !== '#') {
-    return null;
-  }
-  const position = i + 1;
-  const text = /(\w+)/.exec(value.substring(position))?.[0] || '';
-  return { position, text, selected: 0 };
 }
