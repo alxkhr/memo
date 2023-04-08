@@ -1,13 +1,4 @@
 .textarea {
-  appearance: none;
-  padding: 0;
-  border: none;
-  display: block;
-  resize: none;
-  outline: none;
-  height: auto;
-  background: transparent;
-  font-size: 1em;
   width: 100%;
   font-family: monospace;
   position: absolute;
@@ -18,7 +9,7 @@
 .copy {
   white-space: pre-wrap;
   overflow-wrap: break-word;
-  color: red; /* TODO transparent */
+  color: transparent;
   width: 100%;
   font-family: monospace;
   position: absolute;
@@ -45,8 +36,7 @@
   top: 0;
   left: 0;
   background: rgba(255, 255, 255, 0.5);
-  list-style: none;
   font-family: monospace;
-  font-size: 1em;
-  padding: 0;
+  margin-top: 1.2em;
+  margin-left: 0.65em;
 }
