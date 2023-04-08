@@ -2,7 +2,8 @@ import React from 'react';
 import { useMemoStore } from './memo-store';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import css from './memo-list-screen.m.css';
 
 export function MemoListScreen() {
   const navigate = useNavigate();
@@ -28,15 +29,21 @@ export function MemoListScreen() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <ul>
+      <ul className={css.list}>
         {filteredMemos.map((memo) => (
-          <li key={memo.id}>
-            {memo.content}&nbsp;
-            <button onClick={() => navigate(`/note/${memo.id}`)}>
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </button>
-            &nbsp;
-            <button onClick={() => removeMemo(memo.id)}>
+          <li
+            key={memo.id}
+            className={css.item}
+            onClick={() => navigate(`/note/${memo.id}`)}
+          >
+            <p className={css.text}>{memo.content}</p>
+            <button
+              className={css.delete}
+              onClick={(e) => {
+                removeMemo(memo.id);
+                e.stopPropagation();
+              }}
+            >
               <FontAwesomeIcon icon={faTrashCan} />
             </button>
           </li>

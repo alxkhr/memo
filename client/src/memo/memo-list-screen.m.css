@@ -1,0 +1,51 @@
+.item {
+  position: relative;
+  border-radius: 2px;
+  height: fit-content;
+}
+
+.item:hover {
+  box-shadow: 0 0 0 2px red;
+}
+
+.text {
+  padding: .3em .6em;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  cursor: pointer;
+  line-height: 1.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.text:hover {
+  box-shadow: 0 0 0 2px blue;
+}
+
+.delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+  padding: .3em;
+}
+
+.delete:hover {
+  color: red;
+}
+
+.item:hover > .delete {
+  display: block;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 1em;
+  padding: 1em;
+}
