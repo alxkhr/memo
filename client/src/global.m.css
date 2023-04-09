@@ -50,3 +50,8 @@ input {
   background: transparent;
   font-size: 1em;
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
