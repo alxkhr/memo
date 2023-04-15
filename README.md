@@ -1,7 +1,6 @@
 # roadmap
 
 - design
-  - header / navigation
   - details
   - list / search
   - login / register
@@ -25,6 +24,8 @@
 # ideas
 
 - pwa for offline
+- logo
+- connection status always visible in header (connected or not, unreachable server...)
 - really responsive design
   - list beneath details on desktop
 - support more content types (links, drawings, photos, todo-list)
