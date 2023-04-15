@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ConnectScreen } from "./connect/connect-screen";
-import { ErrorScreen } from "./error-screen";
-import { LoginScreen } from "./connect/login-screen";
-import { RegisterScreen } from "./connect/register-screen";
-import { MemoScreen } from "./memo/memo-screen";
-import { MemoListScreen } from "./memo/memo-list-screen";
-import { AppFrame } from "./frame/app-frame";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { ConnectScreen } from './connect/connect-screen';
+import { ErrorScreen } from './error-screen';
+import { LoginScreen } from './connect/login-screen';
+import { RegisterScreen } from './connect/register-screen';
+import { MemoScreen } from './memo/edit/memo-screen';
+import { MemoListScreen } from './memo/search/memo-list-screen';
+import { AppFrame } from './frame/app-frame';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <AppFrame />,
     errorElement: <ErrorScreen />,
     children: [
@@ -20,19 +20,19 @@ const router = createBrowserRouter([
         element: <MemoListScreen />,
       },
       {
-        path: "/connect",
+        path: '/connect',
         element: <ConnectScreen />,
       },
       {
-        path: "/register",
+        path: '/register',
         element: <RegisterScreen />,
       },
       {
-        path: "/login",
+        path: '/login',
         element: <LoginScreen />,
       },
       {
-        path: "/note/:id",
+        path: '/note/:id',
         element: <MemoScreen />,
       },
     ],

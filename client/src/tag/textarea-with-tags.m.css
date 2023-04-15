@@ -1,9 +1,8 @@
 .textarea {
   width: 100%;
   font-family: monospace;
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .copy {
@@ -13,8 +12,7 @@
   width: 100%;
   font-family: monospace;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: .5rem; /* match padding */
 }
 
 .marker {
@@ -28,7 +26,11 @@
 .container {
   position: relative;
   width: 100%;
-  height: 100%;
+  box-sizing: border-box;
+  height: fit-content;
+  padding: .5rem;
+  border-radius: 3px;
+  border: 1px solid #ccc;
 }
 
 .suggestions {
@@ -39,4 +41,5 @@
   font-family: monospace;
   margin-top: 1.2em;
   margin-left: 0.65em;
+  z-index: 3;
 }

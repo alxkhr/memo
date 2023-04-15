@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMemoStore } from './memo-store';
+import { useMemoStore } from '../memo-store';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';

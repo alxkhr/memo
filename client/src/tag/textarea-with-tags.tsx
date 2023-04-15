@@ -141,8 +141,6 @@ export function TextareaWithTags(props: Props) {
   return (
     <>
       <div className={css.container}>
-        {/* TODO make own component for copy */}
-        <div className={css.copy}>{renderTextareaMarker()}</div>
         <textarea
           className={css.textarea}
           ref={textareaRef}
@@ -151,6 +149,8 @@ export function TextareaWithTags(props: Props) {
           onSelect={onCaretPositionChanged}
           onKeyDown={onKeyDown}
         />
+        {/* TODO make own component for copy */}
+        <div className={css.copy}>{renderTextareaMarker()}</div>
       </div>
       {showSuggestions && ( // TODO use a portal and/or own component
         <ul

@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { ErrorScreen } from '../error-screen';
-import { useMemoStore } from './memo-store';
-import { useTags } from '../tag/use-tags';
-import { TextareaWithTags } from '../tag/textarea-with-tags';
+import { ErrorScreen } from '../../error-screen';
+import { useMemoStore } from '../memo-store';
+import { useTags } from '../../tag/use-tags';
+import { TextareaWithTags } from '../../tag/textarea-with-tags';
+import css from './memo-screen.m.css';
 
 export function MemoScreen() {
   const { id } = useParams<{ id: string }>();
@@ -30,7 +31,7 @@ export function MemoScreen() {
     updateMemo({ ...memo, content, updatedAt: date });
   }
   return (
-    <div>
+    <div className={css.container}>
       <TextareaWithTags
         value={memo?.content || ''}
         setValue={onChangeContent}

@@ -1,7 +1,6 @@
 # roadmap
 
 - design
-  - details
   - list / search
   - login / register
   - dark mode
@@ -26,6 +25,8 @@
 - pwa for offline
 - logo
 - connection status always visible in header (connected or not, unreachable server...)
+- autofocus textarea when details are opened (maybe use forward ref for textarea)
+- close the suggestions on esc and on choosing one (fixes new line after tag bug)
 - really responsive design
   - list beneath details on desktop
 - support more content types (links, drawings, photos, todo-list)
@@ -37,3 +38,5 @@
 - test automation
 
 # known bugs
+
+- not able to make new line after tag
