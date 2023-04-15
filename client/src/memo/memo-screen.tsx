@@ -29,22 +29,8 @@ export function MemoScreen() {
     }
     updateMemo({ ...memo, content, updatedAt: date });
   }
-  // TODO fix error when creating a new tag
-  // TODO split mentions on more than just space (i.e. enter, comma, etc.)
-  // TODO highlight mentions
-  // a regex that splits every word
-  // const regex = /[^\w|#]/;
   return (
     <div>
-      {/* <Mentions
-        value={memo?.content || ''}
-        onChange={onChangeContent}
-        prefix={'#'}
-        options={tags}
-        autoSize
-        notFoundContent={<p>new...</p>}
-        split={regex as unknown as string}
-      /> */}
       <TextareaWithTags
         value={memo?.content || ''}
         setValue={onChangeContent}
