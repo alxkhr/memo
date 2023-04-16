@@ -1,12 +1,13 @@
 # roadmap
 
 - design
-  - list / search
   - login / register
   - dark mode
 - fix render bug (loop) with setSupportCoords
   - reproduce: choose first suggestion after typing #
   - reproduce: maybe bbecause of double ##
+- fix open menu bug, when textarea loses focus while writing a tag
+  - repoduce: press new
 - mobile version
 - what happens with sync on logout?
   - only critical if user logs in as a different user, two options...

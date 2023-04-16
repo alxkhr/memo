@@ -1,7 +1,6 @@
 .item {
   position: relative;
   border-radius: 3px;
-  height: fit-content;
 }
 
 .item:hover {
@@ -10,9 +9,6 @@
 
 .text {
   padding: .3em .6em;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  cursor: pointer;
   line-height: 1.5em;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -23,7 +19,16 @@
   overflow-wrap: break-word;
 }
 
-.text:hover {
+.text-wrapper {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  box-sizing: border-box;
+  height: 100%;
+  position: relative;
+}
+
+.text-wrapper:hover {
   box-shadow: 0 0 0 2px blue;
 }
 
@@ -36,7 +41,12 @@
 }
 
 .delete:hover {
+  transform: translate3d(-1px, -1px, 0);
   color: red;
+}
+
+.delete:active {
+  transform: none;
 }
 
 .item:hover > .delete {
@@ -44,8 +54,42 @@
 }
 
 .list {
+  margin-top: 1rem;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  grid-gap: 1em;
-  padding: 1em;
+  grid-gap: 1rem;
+}
+
+.container {
+  padding: 1rem;
+}
+
+.search-label {
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.search-label:hover {
+  transform: translate3d(-1px, -1px, 0);
+  color: blue;
+}
+
+.search-label:active {
+  transform: none;
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.search {
+  display: inline-block;
+  flex: 1 0 auto;
+  width: auto;
+}
+
+.search:focus {
+  border-bottom: 1px solid #ccc;
 }
