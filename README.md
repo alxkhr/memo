@@ -1,8 +1,7 @@
 # roadmap
 
 - design
-  - login / register
-  - dark mode
+  - register
 - fix render bug (loop) with setSupportCoords
   - reproduce: choose first suggestion after typing #
   - reproduce: maybe bbecause of double ##
@@ -25,6 +24,7 @@
 
 - pwa for offline
 - logo
+- dark mode
 - connection status always visible in header (connected or not, unreachable server...)
 - autofocus textarea when details are opened (maybe use forward ref for textarea)
 - close the suggestions on esc and on choosing one (fixes new line after tag bug)

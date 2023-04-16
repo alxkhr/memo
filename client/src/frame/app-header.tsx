@@ -26,7 +26,7 @@ export function AppHeader(props: { className?: string }) {
       <h1 className={css.title}>Headnut</h1>
       <button className={css.new} onClick={onClickNew}>
         <FontAwesomeIcon icon={faPlus} />
-        &nbsp;NEW
+        &nbsp;new
       </button>
     </div>
   );

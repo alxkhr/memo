@@ -1,0 +1,43 @@
+.link {
+  font-style: italic;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.link:hover {
+  color: blue;
+  transform: translate3d(-1px, -1px, 0);
+}
+
+.link:active {
+  transform: none;
+}
+
+.status-box {
+  background: currentColor;
+  padding: 1rem;
+  border-radius: 3px;
+  margin-bottom: .5rem;
+}
+
+.status-box > * {
+  color: white;
+}
+
+.status-box > h1 {
+  font-size: 1.3em;
+  margin: 0;
+  margin-bottom: .5rem;
+}
+
+.status-icon {
+  margin-right: .5em;
+}
+
+.container {
+  padding: 1rem;
+}
+
+.instructions {
+  padding: 1rem;
+}

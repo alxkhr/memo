@@ -3,7 +3,7 @@ import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ConnectScreen } from './connect/connect-screen';
 import { ErrorScreen } from './error-screen';
-import { LoginScreen } from './connect/login-screen';
+import { LoginScreen } from './connect/login/login-screen';
 import { RegisterScreen } from './connect/register-screen';
 import { MemoScreen } from './memo/edit/memo-screen';
 import { MemoListScreen } from './memo/search/memo-list-screen';
