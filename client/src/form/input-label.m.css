@@ -1,0 +1,14 @@
+.label {
+  display: block;
+  margin-bottom: .5rem;
+  cursor: text;
+}
+
+.label:hover {
+  transform: translate3d(-1px, -1px, 0);
+  color: blue;
+}
+
+.label:active {
+  transform: none;
+}

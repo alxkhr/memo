@@ -8,37 +8,8 @@
   flex: 0 0 auto;
 }
 
-.new {
-  border: 1px solid currentColor;
-  border-radius: 3px;
-  box-shadow: 3px 3px 0 0 currentColor;
-  padding: .4em .5em;
-  font-style: italic;
-}
-
-.new:hover {
-  color: blue;
-  transform: translate3d(-1px, -1px, 0);
-  box-shadow: 4px 4px 0 0 currentColor;
-}
-
-.new:active {
-  transform: none;
-  box-shadow: 3px 3px 0 0 currentColor;
-}
-
 .link {
   margin: 0 .5em;
-  font-style: italic;
-}
-
-.link:hover {
-  transform: translate3d(-1px, -1px, 0);
-  color: blue;
-}
-
-.link:active {
-  transform: none;
 }
 
 .title {

@@ -1,7 +1,7 @@
 # roadmap
 
-- design
-  - register
+- use widgets (input, label) in memo-list-screen
+- set route title in header (login, register, search)
 - fix render bug (loop) with setSupportCoords
   - reproduce: choose first suggestion after typing #
   - reproduce: maybe bbecause of double ##
@@ -25,7 +25,7 @@
 - pwa for offline
 - logo
 - dark mode
-- connection status always visible in header (connected or not, unreachable server...)
+- connection status always visible in header (connected or not, unreachable server, synchronizing-spinner...)
 - autofocus textarea when details are opened (maybe use forward ref for textarea)
 - close the suggestions on esc and on choosing one (fixes new line after tag bug)
 - really responsive design

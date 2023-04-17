@@ -5,6 +5,10 @@ import { useConnectStore } from '../connect-store';
 import css from './login-screen.m.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { ScreenContainer } from '../../screen/screen-container';
+import { InputLabel } from '../../form/input-label';
+import { TextInput } from '../../form/text-input';
+import { Button } from '../../button/button';
 
 export function LoginScreen() {
   const [username, setUsername] = React.useState('');
@@ -20,34 +24,30 @@ export function LoginScreen() {
     navigate('/');
   }
   return (
-    <div className={css.container}>
+    <ScreenContainer>
       <Suspense fallback={<div>Loading...</div>}>
         <form>
-          <label className={css.label} htmlFor="username">
-            username
-          </label>
-          <input
+          <InputLabel htmlFor="username">username</InputLabel>
+          <TextInput
             className={css.input}
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          <label className={css.label} htmlFor="password">
-            password
-          </label>
-          <input
+          <InputLabel htmlFor="password">password</InputLabel>
+          <TextInput
             className={css.input}
             id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button className={css.login} onClick={onLogin}>
+          <Button onClick={onLogin}>
             <FontAwesomeIcon icon={faRightFromBracket} />
             &nbsp;login
-          </button>
+          </Button>
         </form>
       </Suspense>
-    </div>
+    </ScreenContainer>
   );
 }

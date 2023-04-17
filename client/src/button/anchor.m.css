@@ -1,0 +1,14 @@
+.link {
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.link:hover {
+  color: blue;
+  transform: translate3d(-1px, -1px, 0);
+}
+
+.link:active {
+  transform: none;
+}

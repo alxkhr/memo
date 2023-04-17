@@ -34,8 +34,10 @@ module.exports = {
               modules: {
                 exportLocalsConvention: 'camelCase',
               },
+              importLoaders: 1,
             },
           },
+          'postcss-loader',
         ],
       },
     ],

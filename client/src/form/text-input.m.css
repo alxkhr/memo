@@ -1,0 +1,9 @@
+.input {
+  display: block;
+  border-bottom: 1px solid #ccc;
+  max-width: 400px;
+}
+
+.input:focus {
+  border-bottom: 1px solid black;
+}

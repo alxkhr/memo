@@ -5,6 +5,7 @@ import { useMemoStore } from '../memo-store';
 import { useTags } from '../../tag/use-tags';
 import { TextareaWithTags } from '../../tag/textarea-with-tags';
 import css from './memo-screen.m.css';
+import { ScreenContainer } from '../../screen/screen-container';
 
 export function MemoScreen() {
   const { id } = useParams<{ id: string }>();
@@ -31,12 +32,12 @@ export function MemoScreen() {
     updateMemo({ ...memo, content, updatedAt: date });
   }
   return (
-    <div className={css.container}>
+    <ScreenContainer>
       <TextareaWithTags
         value={memo?.content || ''}
         setValue={onChangeContent}
         tags={tags}
       />
-    </div>
+    </ScreenContainer>
   );
 }

@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { generateMemoId } from '../memo/generate-memo-id';
+import { Anchor } from '../button/anchor';
+import { Button } from '../button/button';
 import css from './app-header.m.css';
 
 export function AppHeader(props: { className?: string }) {
@@ -17,17 +19,17 @@ export function AppHeader(props: { className?: string }) {
   }
   return (
     <div className={classNames.join(' ')}>
-      <Link className={css.link} to="/">
+      <Anchor className={css.link} href="/">
         search
-      </Link>
-      <Link className={css.link} to="/connect">
+      </Anchor>
+      <Anchor className={css.link} href="/connect">
         connect
-      </Link>
+      </Anchor>
       <h1 className={css.title}>Headnut</h1>
-      <button className={css.new} onClick={onClickNew}>
+      <Button onClick={onClickNew}>
         <FontAwesomeIcon icon={faPlus} />
         &nbsp;new
-      </button>
+      </Button>
     </div>
   );
 }
