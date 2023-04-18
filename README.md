@@ -1,6 +1,5 @@
 # roadmap
 
-- use widgets (input, label) in memo-list-screen
 - set route title in header (login, register, search)
 - fix render bug (loop) with setSupportCoords
   - reproduce: choose first suggestion after typing #

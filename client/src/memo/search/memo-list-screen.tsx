@@ -7,6 +7,9 @@ import {
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import css from './memo-list-screen.m.css';
+import { ScreenContainer } from '../../screen/screen-container';
+import { InputLabel } from '../../form/input-label';
+import { TextInput } from '../../form/text-input';
 
 export function MemoListScreen() {
   const navigate = useNavigate();
@@ -40,12 +43,12 @@ export function MemoListScreen() {
     return <div>Loading...</div>; // TODO loading component
   }
   return (
-    <div className={css.container}>
+    <ScreenContainer>
       <div className={css.searchWrapper}>
-        <label className={css.searchLabel} htmlFor="search">
+        <InputLabel className={css.searchLabel} htmlFor="search">
           <FontAwesomeIcon icon={faMagnifyingGlass} />
-        </label>
-        <input
+        </InputLabel>
+        <TextInput
           className={css.search}
           id="search"
           type="text"
@@ -75,6 +78,6 @@ export function MemoListScreen() {
           </li>
         ))}
       </ul>
-    </div>
+    </ScreenContainer>
   );
 }

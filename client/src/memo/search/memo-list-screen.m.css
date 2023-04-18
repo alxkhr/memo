@@ -60,23 +60,9 @@
   grid-gap: 1rem;
 }
 
-.container {
-  padding: 1rem;
-}
-
 .search-label {
-  cursor: text;
   display: inline-block;
   margin-right: 1rem;
-}
-
-.search-label:hover {
-  transform: translate3d(-1px, -1px, 0);
-  color: blue;
-}
-
-.search-label:active {
-  transform: none;
 }
 
 .search-wrapper {
@@ -87,11 +73,4 @@
 .search {
   display: inline-block;
   flex: 1 0 auto;
-  width: auto;
-  max-width: 400px;
-  border-bottom: 1px solid #ccc;
-}
-
-.search:focus {
-  border-bottom: 1px solid black;
 }
