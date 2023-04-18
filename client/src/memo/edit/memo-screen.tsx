@@ -4,7 +4,6 @@ import { ErrorScreen } from '../../error-screen';
 import { useMemoStore } from '../memo-store';
 import { useTags } from '../../tag/use-tags';
 import { TextareaWithTags } from '../../tag/textarea-with-tags';
-import css from './memo-screen.m.css';
 import { ScreenContainer } from '../../screen/screen-container';
 
 export function MemoScreen() {
