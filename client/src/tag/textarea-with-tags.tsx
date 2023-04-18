@@ -147,6 +147,7 @@ export function TextareaWithTags(props: Props) {
           onChange={(e) => props.setValue(e.target.value)}
           onSelect={onCaretPositionChanged}
           onKeyDown={onKeyDown}
+          onBlur={() => setTagSupport(null)}
         />
         {/* TODO make own component for copy */}
         <div className={css.copy}>{renderTextareaMarker()}</div>

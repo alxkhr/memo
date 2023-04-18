@@ -1,8 +1,5 @@
 # roadmap
 
-- fix open menu bug, when textarea loses focus while writing a tag
-  - repoduce: press new
-- mobile version
 - what happens with sync on logout?
   - only critical if user logs in as a different user, two options...
     - copy memos -> delete last sync in localStorage
@@ -10,6 +7,11 @@
 - refresh token
 - ux
   - undo or confirm when deleting
+- test encryption for sensitive data
+- run it on own server
+  - database
+  - local keys etc
+- mobile version
 - test
   - sync with two connected devices
   - sync with two users
