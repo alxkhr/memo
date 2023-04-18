@@ -1,7 +1,7 @@
 .container {
   display: flex;
-  align-items: center;
-  padding: 1rem .5rem;
+  align-items: baseline;
+  padding: 1rem 1rem;
 }
 
 .container > * {
@@ -9,15 +9,15 @@
 }
 
 .link {
-  margin: 0 .5em;
+  margin: 0 1rem;
 }
 
 .title {
   flex: 1 1 auto;
   display: inline-block;
-  text-align: center;
-  margin: 0;
+  margin: 0 1.5rem;
   padding: 0;
   font-size: 1.5em;
-  font-weight: 600;
+  font-weight: 200;
+  letter-spacing: 1px;
 }

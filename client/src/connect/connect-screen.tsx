@@ -9,6 +9,7 @@ import {
 import css from './connect-screen.m.css';
 import { Anchor } from '../button/anchor';
 import { ScreenContainer } from '../screen/screen-container';
+import { routes } from '../router';
 
 export function ConnectScreen() {
   const { user, logout } = useConnectStore();
@@ -27,7 +28,7 @@ export function ConnectScreen() {
       <p className={css.instructions}>
         You are logged in as {user.username}, to disconnect this browser, you
         can&nbsp;
-        <Anchor href="/connect" onClick={logout}>
+        <Anchor href={routes.connect} onClick={logout}>
           logout
         </Anchor>
         .
@@ -44,9 +45,9 @@ export function ConnectScreen() {
       </div>
       <p className={css.instructions}>
         To connect more devices, please&nbsp;
-        <Anchor href="/register">register</Anchor>
+        <Anchor href={routes.register}>register</Anchor>
         &nbsp;or&nbsp;
-        <Anchor href="/login">log in</Anchor>.
+        <Anchor href={routes.login}>log in</Anchor>.
       </p>
     </ScreenContainer>
   );

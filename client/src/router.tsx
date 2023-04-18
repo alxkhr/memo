@@ -9,9 +9,17 @@ import { MemoScreen } from './memo/edit/memo-screen';
 import { MemoListScreen } from './memo/search/memo-list-screen';
 import { AppFrame } from './frame/app-frame';
 
+export const routes = {
+  home: '/',
+  connect: '/connect',
+  register: '/register',
+  login: '/login',
+  memo: (id: string) => `/nut/${id}`,
+};
+
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: routes.home,
     element: <AppFrame />,
     errorElement: <ErrorScreen />,
     children: [
@@ -20,19 +28,19 @@ const router = createBrowserRouter([
         element: <MemoListScreen />,
       },
       {
-        path: '/connect',
+        path: routes.connect,
         element: <ConnectScreen />,
       },
       {
-        path: '/register',
+        path: routes.register,
         element: <RegisterScreen />,
       },
       {
-        path: '/login',
+        path: routes.login,
         element: <LoginScreen />,
       },
       {
-        path: '/note/:id',
+        path: routes.memo(':id'),
         element: <MemoScreen />,
       },
     ],

@@ -10,6 +10,7 @@ import css from './memo-list-screen.m.css';
 import { ScreenContainer } from '../../screen/screen-container';
 import { InputLabel } from '../../form/input-label';
 import { TextInput } from '../../form/text-input';
+import { routes } from '../../router';
 
 export function MemoListScreen() {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ export function MemoListScreen() {
           <li
             key={memo.id}
             className={css.item}
-            onClick={() => navigate(`/note/${memo.id}`)}
+            onClick={() => navigate(routes.memo(memo.id))}
           >
             <div className={css.textWrapper}>
               <p className={css.text}>{memo.content}</p>

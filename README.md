@@ -1,6 +1,5 @@
 # roadmap
 
-- set route title in header (login, register, search)
 - fix render bug (loop) with setSupportCoords
   - reproduce: choose first suggestion after typing #
   - reproduce: maybe bbecause of double ##
@@ -29,6 +28,8 @@
 - close the suggestions on esc and on choosing one (fixes new line after tag bug)
 - really responsive design
   - list beneath details on desktop
+- semantic html
+  - tags: ie. header, navigation
 - support more content types (links, drawings, photos, todo-list)
 - support more search/filter/sort/visualize stategies (lost notes in a calender?)
 - tag support for search input
