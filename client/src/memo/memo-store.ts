@@ -11,7 +11,7 @@ import {
 } from './memo-db';
 import { syncMemos } from './memo-api';
 
-const LAST_SYNC_KEY = 'lastSync';
+export const LAST_SYNC_KEY = 'lastSync';
 
 interface MemoStore {
   memos: Memo[] | null;

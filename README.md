@@ -1,9 +1,5 @@
 # roadmap
 
-- what happens with sync on logout?
-  - only critical if user logs in as a different user, two options...
-    - copy memos -> delete last sync in localStorage
-    - delete db and las sync, warn that unsynced memos will be lost
 - refresh token
 - ux
   - undo or confirm when deleting
@@ -15,10 +11,13 @@
 - test
   - sync with two connected devices
   - sync with two users
+  - account switching sideeffect: account re-login: login, sync, logout, login, sync (duplicates?)
   - switch users on a device
 
 # ideas
 
+- solve account switching
+  - idea: offer delete db when logged out
 - pwa for offline
 - logo
 - dark mode

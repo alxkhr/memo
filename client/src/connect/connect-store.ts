@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { memoStore } from '../memo/memo-store';
+import { LAST_SYNC_KEY, memoStore } from '../memo/memo-store';
 import { User } from './user';
 
 const USER_KEY = 'user';
@@ -35,6 +35,7 @@ export const useConnectStore = create<ConnectStore>((set, get) => {
     logout: () => {
       localStorage.removeItem(USER_KEY);
       localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(LAST_SYNC_KEY);
       const { syncInterval } = get();
       if (syncInterval) {
         clearInterval(syncInterval);
