@@ -106,9 +106,8 @@ export function TextareaWithTags(props: Props) {
     ) {
       return;
     }
-    setTagSupport((support) =>
-      support ? { ...support, coords: { x: rect.left, y: rect.top } } : null,
-    );
+    const coords = { x: rect.left, y: rect.top };
+    setTagSupport((support) => (support ? { ...support, coords } : null));
   }
 
   function renderTextareaMarker() {
@@ -119,7 +118,7 @@ export function TextareaWithTags(props: Props) {
       const isActiveTag =
         isTag &&
         tagSupport !== null &&
-        textIndex <= tagSupport.position &&
+        textIndex < tagSupport.position &&
         textIndex + t.length >= tagSupport.position;
       textIndex += t.length;
       if (!isTag) {
