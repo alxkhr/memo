@@ -3,7 +3,6 @@
 - refresh token
 - ux
   - undo or confirm when deleting
-- test encryption for sensitive data
 - run it on own server
   - database
   - local keys etc
@@ -24,6 +23,8 @@
 - connection status always visible in header (connected or not, unreachable server, synchronizing-spinner...)
 - autofocus textarea when details are opened (maybe use forward ref for textarea)
 - close the suggestions on esc and on choosing one (fixes new line after tag bug)
+- immediately sync when connect
+- sync now button in connect-screen
 - really responsive design
   - list beneath details on desktop
 - semantic html

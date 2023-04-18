@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
 import { pgPool } from '../db';
 import { StoredMemo, SyncedMemo } from './memo';
+import crypto from 'crypto';
 
 function isSyncRequest(
   body: unknown,
@@ -65,6 +66,7 @@ export const syncHandler: RequestHandler = async (req, res) => {
     }
     // update server
     for (const memo of memosToUpdate) {
+      const content = encrypt(memo.content);
       const result = await client.query(
         'SELECT * FROM memos WHERE id = $1 AND user_id = $2',
         [memo.id, userId],
@@ -76,7 +78,7 @@ export const syncHandler: RequestHandler = async (req, res) => {
           [
             memo.id,
             userId,
-            memo.content,
+            content,
             memo.updatedAt,
             memo.createdAt,
             memo.deleted,
@@ -86,7 +88,7 @@ export const syncHandler: RequestHandler = async (req, res) => {
         // update memo if it does exist
         await client.query(
           'UPDATE memos SET content = $1, updated_at = $2, deleted = $3 WHERE id = $4',
-          [memo.content, memo.updatedAt, memo.deleted, memo.id],
+          [content, memo.updatedAt, memo.deleted, memo.id],
         );
       }
     }
@@ -101,9 +103,11 @@ export const syncHandler: RequestHandler = async (req, res) => {
 };
 
 function mapServerMemo(serverMemo: StoredMemo): SyncedMemo {
-  const { user_id, updated_at, created_at, ...rest } = serverMemo;
+  const { user_id, updated_at, created_at, content, ...rest } = serverMemo;
+  const decryptedContent = decrypt(content);
   return {
     ...rest,
+    content: decryptedContent,
     updatedAt: updated_at,
     createdAt: created_at,
   };
@@ -119,4 +123,25 @@ function verifyToken(authHeader?: string): Promise<string> {
       resolve(decoded as string);
     });
   });
+}
+
+const encryptionAlgorithm = 'aes-256-cbc';
+
+function decrypt(data: string): string {
+  const iv = Buffer.from(data.substring(0, 32), 'hex');
+  const key = Buffer.from(process.env.ENCRYPT!, 'hex');
+  const content = Buffer.from(data.substring(32), 'hex');
+  let deciver = crypto.createDecipheriv(encryptionAlgorithm, key, iv);
+  let decrypted = deciver.update(content);
+  decrypted = Buffer.concat([decrypted, deciver.final()]);
+  return decrypted.toString();
+}
+
+function encrypt(data: string): string {
+  const iv = crypto.randomBytes(16);
+  const key = Buffer.from(process.env.ENCRYPT!, 'hex');
+  let cipher = crypto.createCipheriv(encryptionAlgorithm, key, iv);
+  let encrypted = cipher.update(data);
+  encrypted = Buffer.concat([encrypted, cipher.final()]);
+  return iv.toString('hex') + encrypted.toString('hex');
 }
