@@ -4,6 +4,7 @@
     "strict": true,
     "module": "CommonJS",
     "esModuleInterop": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "typeRoots": ["node_modules/@types", "src/@types"]
   }
 }

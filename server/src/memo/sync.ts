@@ -18,33 +18,16 @@ function isSyncRequest(
 }
 
 export const syncHandler: RequestHandler = async (req, res) => {
-  let username: string | undefined;
-  try {
-    username = await verifyToken(req.headers.authorization);
-  } catch (e) {
-    res.status(401).send('Invalid token');
-    return;
-  }
   if (!isSyncRequest(req.body)) {
     res.status(400).send('Invalid request');
     return;
   }
   const lastSync = req.body.lastSync || '1970-01-01T00:00:00.000Z';
   const client = await pgPool.connect();
-  let userId: number | undefined;
   try {
-    let dbResult = await client.query(
-      'SELECT * FROM users WHERE username = $1',
-      [username],
-    );
-    if (dbResult.rows.length === 0) {
-      res.status(401).send('Invalid token');
-      return;
-    }
-    userId = dbResult.rows[0].id;
-    dbResult = await client.query<StoredMemo>(
+    const dbResult = await client.query<StoredMemo>(
       'SELECT * FROM memos WHERE user_id = $1 AND updated_at > $2',
-      [userId, lastSync],
+      [req.userId, lastSync],
     );
     // compare newMemos with req.body.newMemos
     // if server has newer memos, send them to client
@@ -69,7 +52,7 @@ export const syncHandler: RequestHandler = async (req, res) => {
       const content = encrypt(memo.content);
       const result = await client.query(
         'SELECT * FROM memos WHERE id = $1 AND user_id = $2',
-        [memo.id, userId],
+        [memo.id, req.userId],
       );
       if (result.rows.length === 0) {
         // add memo if it doesn't exist
@@ -77,7 +60,7 @@ export const syncHandler: RequestHandler = async (req, res) => {
           'INSERT INTO memos (id, user_id, content, updated_at, created_at, deleted) VALUES ($1, $2, $3, $4, $5, $6)',
           [
             memo.id,
-            userId,
+            req.userId,
             content,
             memo.updatedAt,
             memo.createdAt,
@@ -92,7 +75,7 @@ export const syncHandler: RequestHandler = async (req, res) => {
         );
       }
     }
-    res.json({ newMemos: memosToSend });
+    res.json({ newMemos: memosToSend, newToken: req.newToken });
   } catch (e) {
     console.error(e);
     res.status(500).send('Internal server error');
@@ -111,18 +94,6 @@ function mapServerMemo(serverMemo: StoredMemo): SyncedMemo {
     updatedAt: updated_at,
     createdAt: created_at,
   };
-}
-
-function verifyToken(authHeader?: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    if (!authHeader) return reject('No auth header');
-    if (!authHeader.startsWith('Bearer ')) return reject('Invalid auth header');
-    const token = authHeader.substring(7);
-    jwt.verify(token, process.env.SECRET!, (err, decoded) => {
-      if (err) return reject(err);
-      resolve(decoded as string);
-    });
-  });
 }
 
 const encryptionAlgorithm = 'aes-256-cbc';

@@ -1,12 +1,18 @@
 # roadmap
 
 - refresh token
+  - fix login and register on server
+  - use newToken on client
+    - always add auth-header, if token exists (read from memory, not localstorage)
+    - refresh token if not authorized
+    - show login if not authorized to refresh
 - ux
   - undo or confirm when deleting
 - run it on own server
   - database
   - local keys etc
 - mobile version
+- server logs
 - test
   - sync with two connected devices
   - sync with two users

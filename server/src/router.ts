@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import { userRouter } from './user';
 import { memoRouter } from './memo';
 
@@ -15,6 +16,7 @@ const apiRouter = express.Router();
 appRouter.use('/api', apiRouter);
 apiRouter.use(bodyParser.json());
 apiRouter.use(bodyParser.urlencoded({ extended: true }));
+apiRouter.use(cookieParser());
 apiRouter.use('/user', userRouter);
 apiRouter.use('/memo', memoRouter);
 
