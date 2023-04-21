@@ -1,11 +1,5 @@
 # roadmap
 
-- refresh token
-  - fix login and register on server
-  - use newToken on client
-    - always add auth-header, if token exists (read from memory, not localstorage)
-    - refresh token if not authorized
-    - show login if not authorized to refresh
 - ux
   - undo or confirm when deleting
 - run it on own server
@@ -27,10 +21,9 @@
 - logo
 - dark mode
 - connection status always visible in header (connected or not, unreachable server, synchronizing-spinner...)
+- warn the user if silent refresh didn't work and he is automatically logged out, link to login
 - autofocus textarea when details are opened (maybe use forward ref for textarea)
 - close the suggestions on esc and on choosing one (fixes new line after tag bug)
-- immediately sync when connect
-- sync now button in connect-screen
 - really responsive design
   - list beneath details on desktop
 - semantic html

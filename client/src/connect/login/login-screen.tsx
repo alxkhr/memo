@@ -19,8 +19,8 @@ export function LoginScreen() {
     event.preventDefault();
     // TODO prevent empty username or password
     // TODO prevent login while logging in
-    const { user, token } = await requestLogin(username, password);
-    login(user, token);
+    const { newToken } = await requestLogin(username, password);
+    login({ username }, newToken);
     navigate('/');
   }
   return (

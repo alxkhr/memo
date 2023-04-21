@@ -17,8 +17,9 @@ export const Anchor = forwardRef<
   function onClick(event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
     if (onClickProps) {
-      onClickProps();
-    } else {
+      onClickProps(event);
+    }
+    if (props.href) {
       navigate(props.href);
     }
   }

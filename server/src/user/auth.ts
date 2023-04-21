@@ -1,14 +1,14 @@
 import { pgPool } from '../db';
 import { RequestHandler } from 'express';
-import { verifyToken } from './verify-token';
-import { createAccessToken } from './create-access-token';
-import { matchUserAgent } from './compare-user-agent';
+import { createAccessToken, verifyAccessToken } from './access-token';
+import { matchUserAgent } from './user-agent';
+import { createRefreshToken } from './refresh-token';
 
 export const authMiddleware: RequestHandler = async (req, res, next) => {
   let userId: string | undefined;
   let token: string | undefined;
   try {
-    const verification = await verifyToken(req.headers.authorization);
+    const verification = await verifyAccessToken(req.headers.authorization);
     userId = verification.userId;
     token = verification.token;
   } catch (e) {
@@ -57,11 +57,13 @@ export const authMiddleware: RequestHandler = async (req, res, next) => {
     }
     // create new access token
     newToken = createAccessToken(userId);
+    // create new refresh token
+    const newRefreshToken = createRefreshToken(res, userId);
     // update the access token in the database
-    await client.query('UPDATE clients SET access_token = $1 WHERE id = $2', [
-      newToken,
-      clientId,
-    ]);
+    await client.query(
+      'UPDATE clients SET access_token = $1, refresh_token = $2 WHERE id = $3',
+      [newToken, newRefreshToken, clientId],
+    );
   } catch (e) {
     console.error(e);
     res.status(500).send('Internal server error');

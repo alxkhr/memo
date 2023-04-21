@@ -1,9 +1,8 @@
 import { pgPool } from '../db';
 import bcrypt from 'bcrypt';
 import { RequestHandler } from 'express';
-import jwt from 'jsonwebtoken';
 
-export const createHandler: RequestHandler = async (req, res) => {
+export const createUserHandler: RequestHandler = async (req, res, next) => {
   const { username, password, key } = req.body;
   if (!username || !password || !key) {
     res.status(400).send('Username, password and key are required');
@@ -36,14 +35,11 @@ export const createHandler: RequestHandler = async (req, res) => {
     // encrypt the password
     const encryptedPassword = await bcrypt.hash(password, 10);
     // insert the new user into the database
-    await client.query(
-      'INSERT INTO users (username, password, key) VALUES ($1, $2, $3)',
+    const user = await client.query(
+      'INSERT INTO users (username, password, key) VALUES ($1, $2, $3) RETURNING *',
       [username, encryptedPassword, key],
     );
-    // TODO also encryt the users id, maybe only the id
-    // TODO outsource the token creation
-    const token = jwt.sign(username, process.env.SECRET!);
-    res.json({ user: { username }, token });
+    req.userId = user.rows[0].id;
   } catch (e) {
     console.error(e);
     res.status(500).send('Internal server error');
@@ -51,4 +47,6 @@ export const createHandler: RequestHandler = async (req, res) => {
   } finally {
     client.release();
   }
+  // next, login
+  next();
 };

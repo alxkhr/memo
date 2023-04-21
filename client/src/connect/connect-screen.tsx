@@ -1,6 +1,5 @@
 import React from 'react';
 import { useConnectStore } from './connect-store';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircleNodes,
@@ -12,7 +11,7 @@ import { ScreenContainer } from '../screen/screen-container';
 import { routes } from '../router';
 
 export function ConnectScreen() {
-  const { user, logout } = useConnectStore();
+  const { user, logout, manualSync } = useConnectStore();
   return user ? (
     <ScreenContainer>
       <div className={css.statusBox}>
@@ -26,9 +25,14 @@ export function ConnectScreen() {
         </p>
       </div>
       <p className={css.instructions}>
-        You are logged in as {user.username}, to disconnect this browser, you
-        can&nbsp;
-        <Anchor href={routes.connect} onClick={logout}>
+        You are logged in as {user.username}, your memos will be synchronized
+        every two minutes. You can also{' '}
+        <Anchor href={routes.home} onClick={() => manualSync()}>
+          manually&nbsp;trigger&nbsp;synchronisation
+        </Anchor>
+        .<br />
+        To disconnect this browser, you can{' '}
+        <Anchor href={routes.connect} onClick={() => logout()}>
           logout
         </Anchor>
         .
@@ -44,7 +48,7 @@ export function ConnectScreen() {
         <p>Your notes will be saved in the browser's storage on this device.</p>
       </div>
       <p className={css.instructions}>
-        To connect more devices, please&nbsp;
+        To connect more devices, please{' '}
         <Anchor href={routes.register}>register</Anchor>
         &nbsp;or&nbsp;
         <Anchor href={routes.login}>log in</Anchor>.

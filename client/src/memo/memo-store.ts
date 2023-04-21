@@ -10,6 +10,8 @@ import {
   storeSyncedMemos,
 } from './memo-db';
 import { syncMemos } from './memo-api';
+import { connectStore } from '../connect/connect-store';
+import { AppError, newError } from '../error/error';
 
 export const LAST_SYNC_KEY = 'lastSync';
 
@@ -25,7 +27,7 @@ export const memoStore = createStore<MemoStore>((set, get) => {
   getMemos().then((memos) => set({ memos }));
   function setIfInitialized(...args: Parameters<typeof set>) {
     if (!get().memos) {
-      throw new Error('Memos are not initialized');
+      throw newError('ApplicationError', 'Memos are not initialized');
     }
     return set(...args);
   }
@@ -53,12 +55,22 @@ export const memoStore = createStore<MemoStore>((set, get) => {
       // get memos from indexedDB because of deleted memos
       const storedMemos = await getRawMemos();
       const lastSync = localStorage.getItem(LAST_SYNC_KEY);
+      // TODO throw if no token
+      const { token, logout } = connectStore.getState();
       let newMemos: SyncedMemo[] | undefined;
       try {
-        newMemos = (await syncMemos(storedMemos, lastSync)).newMemos;
+        newMemos = await syncMemos(storedMemos, lastSync, token!);
       } catch (e) {
-        // TODO handle error
-        console.error(e);
+        switch ((e as AppError).type) {
+          case 'LoginExpiredError':
+            // TODO warn the user to login again
+            logout();
+            break;
+          default:
+            // TODO handle error
+            console.error(e);
+        }
+        return;
       }
       await storeSyncedMemos(newMemos!);
       const newMemoState = await getMemos();

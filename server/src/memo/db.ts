@@ -4,7 +4,7 @@ export async function createMemosTable() {
   const query = `
     CREATE TABLE IF NOT EXISTS memos (
       id VARCHAR(255) NOT NULL,
-      user_id INTEGER NOT NULL,
+      user_id uuid NOT NULL,
       content TEXT NOT NULL,
       created_at VARCHAR(255) NOT NULL,
       updated_at VARCHAR(255) NOT NULL, 

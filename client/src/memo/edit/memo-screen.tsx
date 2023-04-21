@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { ErrorScreen } from '../../error-screen';
+import { ErrorScreen } from '../../error/error-screen';
 import { useMemoStore } from '../memo-store';
 import { useTags } from '../../tag/use-tags';
 import { TextareaWithTags } from '../../tag/textarea-with-tags';

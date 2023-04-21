@@ -1,9 +1,8 @@
 import { RequestHandler } from 'express';
 import { pgPool } from '../db';
-import { verifyToken } from './verify-token';
-import { createAccessToken } from './create-access-token';
-import { createRefreshToken } from './create-refresh-token';
-import { matchUserAgent } from './compare-user-agent';
+import { createAccessToken } from './access-token';
+import { createRefreshToken, verifyRefreshToken } from './refresh-token';
+import { matchUserAgent } from './user-agent';
 
 export const refreshHandler: RequestHandler = async (req, res) => {
   const refreshCookie: string | undefined = req.cookies.refreshToken;
@@ -13,16 +12,15 @@ export const refreshHandler: RequestHandler = async (req, res) => {
     return;
   }
   let userId: string | undefined;
-  let token: string | undefined;
   try {
-    const verification = await verifyToken(refreshCookie);
+    const verification = await verifyRefreshToken(refreshCookie);
     userId = verification.userId;
-    token = verification.token;
   } catch (e) {
+    // TODO if the token is expired, check the userId nevertheless to identify something suspicious
     res.status(401).send('Unauthorized');
     return;
   }
-  if (!userId || !token) {
+  if (!userId) {
     res.status(401).send('Unauthorized');
     return;
   }
@@ -50,13 +48,13 @@ export const refreshHandler: RequestHandler = async (req, res) => {
       return;
     }
     // check old refresh token
-    if (userClient.refresh_token !== token) {
+    if (userClient.refresh_token !== refreshCookie) {
       console.warn('Suspicious refresh attempt: token does not match client');
       res.status(401).send('Unauthorized');
       return;
     }
-    // check access token
-    if (userClient.access_token !== req.headers.authorization) {
+    // check access token // TODO outsource substring calculation
+    if (userClient.access_token !== req.headers.authorization?.substring(7)) {
       console.warn('Suspicious refresh attempt: token does not match client');
       res.status(401).send('Unauthorized');
       return;

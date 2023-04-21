@@ -2,7 +2,7 @@ import React from 'react';
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ConnectScreen } from './connect/connect-screen';
-import { ErrorScreen } from './error-screen';
+import { ErrorScreen } from './error/error-screen';
 import { LoginScreen } from './connect/login/login-screen';
 import { RegisterScreen } from './connect/register/register-screen';
 import { MemoScreen } from './memo/edit/memo-screen';

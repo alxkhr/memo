@@ -20,8 +20,8 @@ export function RegisterScreen() {
     event.preventDefault();
     // TODO prevent empty username or password
     // TODO prevent register while registering
-    const { user, token } = await requestRegister(username, password, key);
-    login(user, token);
+    const { newToken } = await requestRegister(username, password, key);
+    login({ username }, newToken);
     navigate('/');
   }
   return (

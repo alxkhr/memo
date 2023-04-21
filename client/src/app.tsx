@@ -1,7 +1,7 @@
-import React from "react";
-import { Router } from "./router";
-import { ErrorBoundary } from "react-error-boundary";
-import { ErrorScreen } from "./error-screen";
+import React from 'react';
+import { Router } from './router';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorScreen } from './error/error-screen';
 
 export function App() {
   return (

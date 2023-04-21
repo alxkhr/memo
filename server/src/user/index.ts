@@ -1,10 +1,12 @@
-import express from "express";
-import { createHandler } from "./create";
-import { loginHandler } from "./login";
-import { createUserTable } from "./db";
+import express from 'express';
+import { loginHandler, verifyCredentialsHandler } from './login';
+import { createUserTable } from './db';
+import { createUserHandler } from './create';
+import { refreshHandler } from './refresh';
 
 createUserTable();
 
 export const userRouter = express.Router();
-userRouter.post("/create", createHandler);
-userRouter.post("/login", loginHandler);
+userRouter.post('/create', createUserHandler, loginHandler);
+userRouter.post('/login', verifyCredentialsHandler, loginHandler);
+userRouter.post('/refresh', refreshHandler);

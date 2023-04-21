@@ -2,11 +2,15 @@ import jwt from 'jsonwebtoken';
 import { pgPool } from '../db';
 import bcrypt from 'bcrypt';
 import { RequestHandler } from 'express';
-import { createAccessToken } from './create-access-token';
-import { createRefreshToken } from './create-refresh-token';
-import { matchUserAgent } from './compare-user-agent';
+import { createAccessToken } from './access-token';
+import { createRefreshToken } from './refresh-token';
+import { matchUserAgent } from './user-agent';
 
-export const authHandler: RequestHandler = async (req, res) => {
+export const verifyCredentialsHandler: RequestHandler = async (
+  req,
+  res,
+  next,
+) => {
   const { username, password } = req.body;
   if (!username || !password) {
     res.status(400).send('Username and password are required');
@@ -15,7 +19,7 @@ export const authHandler: RequestHandler = async (req, res) => {
   // open database connection
   const client = await pgPool.connect();
   try {
-    // verify the user
+    // verify the credentials
     const user = await client.query('SELECT * FROM users WHERE username = $1', [
       username,
     ]);
@@ -28,6 +32,7 @@ export const authHandler: RequestHandler = async (req, res) => {
       res.status(401).send('Invalid username or password');
       return;
     }
+    req.userId = user.rows[0].id;
   } catch (e) {
     console.error(e);
     res.status(500).send('Internal server error');
@@ -36,9 +41,8 @@ export const authHandler: RequestHandler = async (req, res) => {
     // close database connection
     client.release();
   }
-  // if it is, return the user object and a token
-  const token = jwt.sign(username, process.env.SECRET!);
-  res.json({ user: { username }, token });
+  // if everything is valid, login next
+  next();
 };
 
 export const loginHandler: RequestHandler = async (req, res) => {
