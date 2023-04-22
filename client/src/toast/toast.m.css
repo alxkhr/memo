@@ -1,0 +1,56 @@
+.toast {
+  position: relative;
+  border-radius: 3px;
+  box-shadow: 0 0 0 2px currentColor;
+  background-color: currentColor;
+  animation: fade-out 5s ease-in-out;
+  animation-delay: 3s;
+}
+
+.toast:hover {
+  box-shadow: 0 0 0 2px red;
+  opacity: 1 !important;
+  animation-play-state: paused;
+}
+
+.toast:hover > .delete {
+  display: block;
+}
+
+.content {
+  border-radius: 3px;
+  padding: .3rem .6rem;
+  color: white;
+  cursor: pointer;
+}
+
+.content:hover {
+  box-shadow: 0 0 0 2px blue;
+}
+
+.delete {
+  color: white;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+  padding: .3em;
+}
+
+.delete:hover {
+  transform: translate3d(-1px, -1px, 0);
+  color: red;
+}
+
+.delete:active {
+  transform: none;
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

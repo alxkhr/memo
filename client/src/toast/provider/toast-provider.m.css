@@ -1,0 +1,10 @@
+.container {
+  position: relative;
+}
+
+.toasts {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 300px;
+}

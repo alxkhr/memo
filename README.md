@@ -1,7 +1,5 @@
 # roadmap
 
-- ux
-  - undo or confirm when deleting
 - run it on own server
   - database
   - local keys etc
@@ -21,7 +19,6 @@
 - logo
 - dark mode
 - connection status always visible in header (connected or not, unreachable server, synchronizing-spinner...)
-- warn the user if silent refresh didn't work and he is automatically logged out, link to login
 - autofocus textarea when details are opened (maybe use forward ref for textarea)
 - close the suggestions on esc and on choosing one (fixes new line after tag bug)
 - really responsive design

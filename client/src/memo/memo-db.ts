@@ -81,3 +81,19 @@ export async function deleteMemo(id: string) {
     store.put({ ...memo, deleted: true, updatedAt: new Date().toISOString() });
   };
 }
+
+export async function undoDeleteAndGetMemo(id: string): Promise<Memo> {
+  const db = await connect();
+  const transaction = db.transaction(STORE_NAME, 'readwrite');
+  const store = transaction.objectStore(STORE_NAME);
+  const request = store.get(id);
+  return new Promise((resolve, reject) => {
+    request.onsuccess = (event) => {
+      const memo = (event as Event & { target: { result: StoredMemo } }).target
+        .result;
+      resolve(memo);
+      store.put({ ...memo, deleted: false });
+    };
+    request.onerror = (e) => reject(e);
+  });
+}

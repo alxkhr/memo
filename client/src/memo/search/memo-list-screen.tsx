@@ -11,10 +11,12 @@ import { ScreenContainer } from '../../screen/screen-container';
 import { InputLabel } from '../../form/input-label';
 import { TextInput } from '../../form/text-input';
 import { routes } from '../../router';
+import { useToastStore } from '../../toast/toast-store';
 
 export function MemoListScreen() {
   const navigate = useNavigate();
-  const { memos, removeMemo } = useMemoStore();
+  const { memos, removeMemo, undoRemoveMemo } = useMemoStore();
+  const { addToast } = useToastStore();
   const [search, setSearch] = React.useState('');
   const sortedMemos = React.useMemo(
     () =>
@@ -71,6 +73,14 @@ export function MemoListScreen() {
               className={css.delete}
               onClick={(e) => {
                 removeMemo(memo.id);
+                addToast({
+                  children: (
+                    <p>
+                      Memo {memo.id} deleted. Click to <strong>undo</strong>.
+                    </p>
+                  ),
+                  onClick: () => undoRemoveMemo(memo.id),
+                });
                 e.stopPropagation();
               }}
             >

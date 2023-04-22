@@ -8,10 +8,13 @@ import {
   getMemos,
   getRawMemos,
   storeSyncedMemos,
+  undoDeleteAndGetMemo,
 } from './memo-db';
 import { syncMemos } from './memo-api';
 import { connectStore } from '../connect/connect-store';
 import { AppError, newError } from '../error/error';
+import { toastStore } from '../toast/toast-store';
+import { router } from '../router';
 
 export const LAST_SYNC_KEY = 'lastSync';
 
@@ -19,6 +22,7 @@ interface MemoStore {
   memos: Memo[] | null;
   addMemo: (memo: Memo) => void;
   removeMemo: (id: string) => void;
+  undoRemoveMemo: (id: string) => Promise<void>;
   updateMemo: (memo: Memo) => void;
   syncMemos: () => Promise<void>;
 }
@@ -44,6 +48,12 @@ export const memoStore = createStore<MemoStore>((set, get) => {
         memos: state.memos!.filter((memo) => memo.id !== id),
       }));
     },
+    undoRemoveMemo: async (id: string) => {
+      const memo = await undoDeleteAndGetMemo(id);
+      setIfInitialized((state) => ({
+        memos: [...state.memos!, memo],
+      }));
+    },
     updateMemo: (memo: Memo) => {
       storeMemo(memo);
       setIfInitialized((state) => ({
@@ -63,7 +73,10 @@ export const memoStore = createStore<MemoStore>((set, get) => {
       } catch (e) {
         switch ((e as AppError).type) {
           case 'LoginExpiredError':
-            // TODO warn the user to login again
+            toastStore.getState().addToast({
+              children: 'Login expired. Please log in again.',
+              onClick: () => router.navigate('/login'),
+            });
             logout();
             break;
           default:

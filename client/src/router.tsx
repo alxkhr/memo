@@ -17,7 +17,7 @@ export const routes = {
   memo: (id: string) => `/nut/${id}`,
 };
 
-const router = createBrowserRouter([
+export const router = createBrowserRouter([
   {
     path: routes.home,
     element: <AppFrame />,
