@@ -1,8 +1,5 @@
 # roadmap
 
-- run it on own server
-  - database
-  - local keys etc
 - mobile version
 - server logs
 - test
@@ -36,3 +33,4 @@
 # known bugs
 
 - not able to make new line after tag
+- undefined token on client after internal server error
