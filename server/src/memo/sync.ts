@@ -1,7 +1,6 @@
 import { RequestHandler } from 'express';
-import jwt from 'jsonwebtoken';
 import { pgPool } from '../db';
-import { StoredMemo, SyncedMemo } from './memo';
+import { StoredMemo, SyncedMemo } from './memo-type';
 import crypto from 'crypto';
 
 function isSyncRequest(
