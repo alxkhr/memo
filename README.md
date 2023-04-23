@@ -10,6 +10,8 @@
 
 # ideas
 
+- fix some known bugs
+- fix some todos in code
 - solve account switching
   - idea: offer delete db when logged out
 - pwa for offline
