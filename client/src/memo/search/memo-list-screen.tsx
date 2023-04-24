@@ -12,6 +12,18 @@ import { InputLabel } from '../../form/input-label';
 import { TextInput } from '../../form/text-input';
 import { routes } from '../../router';
 import { useToastStore } from '../../toast/toast-store';
+import { SwipeableListItem } from '../../swipe/swipeable-list-item';
+
+// TODO move to own file
+function isTouchDevice() {
+  return (
+    'ontouchstart' in window ||
+    navigator.maxTouchPoints > 0 ||
+    (navigator as any).msMaxTouchPoints > 0
+  );
+}
+
+const isTouch = isTouchDevice();
 
 export function MemoListScreen() {
   const navigate = useNavigate();
@@ -45,6 +57,17 @@ export function MemoListScreen() {
   if (!filteredMemos) {
     return <div>Loading...</div>; // TODO loading component
   }
+  function onRemoveMemo(id: string) {
+    removeMemo(id);
+    addToast({
+      children: (
+        <p>
+          Memo {id} deleted. Click to <strong>undo</strong>.
+        </p>
+      ),
+      onClick: () => undoRemoveMemo(id),
+    });
+  }
   return (
     <ScreenContainer>
       <div className={css.searchWrapper}>
@@ -60,34 +83,41 @@ export function MemoListScreen() {
         />
       </div>
       <ul className={css.list}>
-        {filteredMemos.map((memo) => (
-          <li
-            key={memo.id}
-            className={css.item}
-            onClick={() => navigate(routes.memo(memo.id))}
-          >
-            <div className={css.textWrapper}>
-              <p className={css.text}>{memo.content}</p>
-            </div>
-            <button
-              className={css.delete}
-              onClick={(e) => {
-                removeMemo(memo.id);
-                addToast({
-                  children: (
-                    <p>
-                      Memo {memo.id} deleted. Click to <strong>undo</strong>.
-                    </p>
-                  ),
-                  onClick: () => undoRemoveMemo(memo.id),
-                });
-                e.stopPropagation();
-              }}
-            >
-              <FontAwesomeIcon icon={faTrashCan} />
-            </button>
-          </li>
-        ))}
+        {isTouch
+          ? filteredMemos.map((memo) => (
+              <SwipeableListItem
+                key={memo.id}
+                className={css.item}
+                onClick={() => navigate(routes.memo(memo.id))}
+                onSwipe={
+                  () => onRemoveMemo(memo.id) // TODO feedback for the user that it will be deleted
+                }
+              >
+                <div className={css.textWrapper}>
+                  <p className={css.text}>{memo.content}</p>
+                </div>
+              </SwipeableListItem>
+            ))
+          : filteredMemos.map((memo) => (
+              <li
+                key={memo.id}
+                className={css.item}
+                onClick={() => navigate(routes.memo(memo.id))}
+              >
+                <div className={css.textWrapper}>
+                  <p className={css.text}>{memo.content}</p>
+                </div>
+                <button
+                  className={css.delete}
+                  onClick={(e) => {
+                    onRemoveMemo(memo.id);
+                    e.stopPropagation();
+                  }}
+                >
+                  <FontAwesomeIcon icon={faTrashCan} />
+                </button>
+              </li>
+            ))}
       </ul>
     </ScreenContainer>
   );
