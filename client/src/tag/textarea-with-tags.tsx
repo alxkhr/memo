@@ -169,7 +169,7 @@ export function TextareaWithTags(props: Props) {
               key={t}
               style={
                 i === tagSupport.selected
-                  ? { outline: '1px solid red' }
+                  ? { outline: '1px solid blue' }
                   : undefined
               }
             >
