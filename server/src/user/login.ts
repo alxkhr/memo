@@ -5,6 +5,7 @@ import { RequestHandler } from 'express';
 import { createAccessToken } from './access-token';
 import { createRefreshToken } from './refresh-token';
 import { matchUserAgent } from './user-agent';
+import { logger } from '../logger';
 
 export const verifyCredentialsHandler: RequestHandler = async (
   req,
@@ -34,7 +35,7 @@ export const verifyCredentialsHandler: RequestHandler = async (
     }
     req.userId = user.rows[0].id;
   } catch (e) {
-    console.error(e);
+    logger.error(`VerifyCredentialsError: ${e}`);
     res.status(500).send('Internal server error');
     return;
   } finally {
@@ -64,7 +65,7 @@ export const loginHandler: RequestHandler = async (req, res) => {
         [clientId, req.userId],
       );
       if (clientResult.rows.length === 0) {
-        console.warn('Suspicious login attempt: Client not found');
+        logger.warn('Suspicious login attempt: Client not found');
         res.status(401).send('Unauthorized');
         return;
       }
@@ -75,7 +76,7 @@ export const loginHandler: RequestHandler = async (req, res) => {
           clientResult.rows[0].user_agent,
         )
       ) {
-        console.warn('Suspicious login attempt: User agent does not match');
+        logger.warn('Suspicious login attempt: User agent does not match');
         res.status(401).send('Unauthorized');
         return;
       }
@@ -99,7 +100,7 @@ export const loginHandler: RequestHandler = async (req, res) => {
       });
     }
   } catch (e) {
-    console.error(e);
+    logger.error(`LoginError: ${e}`);
     res.status(500).send('Internal server error');
     return;
   } finally {

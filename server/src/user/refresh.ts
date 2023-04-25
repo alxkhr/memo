@@ -3,11 +3,12 @@ import { pgPool } from '../db';
 import { createAccessToken } from './access-token';
 import { createRefreshToken, verifyRefreshToken } from './refresh-token';
 import { matchUserAgent } from './user-agent';
+import { logger } from '../logger';
 
 export const refreshHandler: RequestHandler = async (req, res) => {
   const refreshCookie: string | undefined = req.cookies.refreshToken;
   if (!refreshCookie) {
-    console.warn('Suspicious refresh attempt: no refresh token cookie');
+    logger.warn('Suspicious refresh attempt: no refresh token cookie');
     res.status(401).send('Unauthorized');
     return;
   }
@@ -27,7 +28,7 @@ export const refreshHandler: RequestHandler = async (req, res) => {
 
   const clientId: string | undefined = req.cookies.clientId;
   if (!clientId) {
-    console.warn('Suspicious refresh attempt: no client id cookie');
+    logger.warn('Suspicious refresh attempt: no client id cookie');
     res.status(401).send('Unauthorized');
     return;
   }
@@ -41,7 +42,7 @@ export const refreshHandler: RequestHandler = async (req, res) => {
     const userClient = clientResult.rows[0];
     // verify client
     if (!userClient) {
-      console.warn(
+      logger.warn(
         'Suspicious refresh attempt: client does not match user or is unknown',
       );
       res.status(401).send('Unauthorized');
@@ -49,19 +50,19 @@ export const refreshHandler: RequestHandler = async (req, res) => {
     }
     // check old refresh token
     if (userClient.refresh_token !== refreshCookie) {
-      console.warn('Suspicious refresh attempt: token does not match client');
+      logger.warn('Suspicious refresh attempt: token does not match client');
       res.status(401).send('Unauthorized');
       return;
     }
     // check access token // TODO outsource substring calculation
     if (userClient.access_token !== req.headers.authorization?.substring(7)) {
-      console.warn('Suspicious refresh attempt: token does not match client');
+      logger.warn('Suspicious refresh attempt: token does not match client');
       res.status(401).send('Unauthorized');
       return;
     }
     // compare the user agents
     if (!matchUserAgent(req.headers['user-agent'], userClient.user_agent)) {
-      console.warn(
+      logger.warn(
         'Suspicious refresh attempt: user agent does not match client',
       );
       res.status(401).send('Unauthorized');
@@ -78,7 +79,7 @@ export const refreshHandler: RequestHandler = async (req, res) => {
     );
     res.json({ newToken: newAccessToken });
   } catch (e) {
-    console.error(e);
+    logger.error(`RefreshError: ${e}`);
     res.status(500).send('Internal server error');
     return;
   } finally {

@@ -1,4 +1,5 @@
 import { pgPool } from '../db';
+import { logger } from '../logger';
 
 export async function createUserTable() {
   const query = `
@@ -22,7 +23,7 @@ export async function createUserTable() {
   try {
     await client.query(query);
   } catch (e) {
-    console.error(e);
+    logger.error(`DatabaseError: ${e}`);
   } finally {
     client.release();
   }

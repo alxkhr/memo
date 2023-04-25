@@ -2,3 +2,4 @@ node_modules
 server/dist
 client/dist
 .env
+logs

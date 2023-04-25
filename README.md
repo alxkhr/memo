@@ -1,7 +1,5 @@
 # roadmap
 
-- some better colors (delete dummy red)
-- server logs
 - test
   - sync with two connected devices
   - sync with two users
@@ -15,7 +13,7 @@
 - solve account switching
   - idea: offer delete db when logged out
 - pwa for offline
-- logo
+- logo + favicon
 - dark mode
 - connection status always visible in header (connected or not, unreachable server, synchronizing-spinner...)
 - autofocus textarea when details are opened (maybe use forward ref for textarea)

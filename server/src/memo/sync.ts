@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import { pgPool } from '../db';
 import { StoredMemo, SyncedMemo } from './memo-type';
 import crypto from 'crypto';
+import { logger } from '../logger';
 
 function isSyncRequest(
   body: unknown,
@@ -76,7 +77,7 @@ export const syncHandler: RequestHandler = async (req, res) => {
     }
     res.json({ newMemos: memosToSend, newToken: req.newToken });
   } catch (e) {
-    console.error(e);
+    logger.error(`SyncError: ${e}`);
     res.status(500).send('Internal server error');
     return;
   } finally {

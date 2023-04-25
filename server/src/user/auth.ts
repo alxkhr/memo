@@ -3,6 +3,7 @@ import { RequestHandler } from 'express';
 import { createAccessToken, verifyAccessToken } from './access-token';
 import { matchUserAgent } from './user-agent';
 import { createRefreshToken } from './refresh-token';
+import { logger } from '../logger';
 
 export const authMiddleware: RequestHandler = async (req, res, next) => {
   let userId: string | undefined;
@@ -22,7 +23,7 @@ export const authMiddleware: RequestHandler = async (req, res, next) => {
 
   const clientId: string | undefined = req.cookies.clientId;
   if (!clientId) {
-    console.warn('Suspicious Request: no client id cookie');
+    logger.warn('Suspicious Request while authenticating: no client id cookie');
     res.status(401).send('Unauthorized');
     return;
   }
@@ -38,20 +39,24 @@ export const authMiddleware: RequestHandler = async (req, res, next) => {
 
     // verify client
     if (!userClient) {
-      console.warn(
-        'Suspicious Request: client does not match user or is unknown',
+      logger.warn(
+        'Suspicious Request while authenticating: client does not match user or is unknown',
       );
       res.status(401).send('Unauthorized');
       return;
     }
     // double check token
     if (userClient.access_token !== token) {
-      console.warn('Suspicious Request: token does not match client');
+      logger.warn(
+        'Suspicious Request while authenticating: token does not match client',
+      );
       res.status(401).send('Unauthorized');
       return;
     }
     if (!matchUserAgent(req.headers['user-agent'], userClient.user_agent)) {
-      console.warn('Suspicious Request: user agent does not match client');
+      logger.warn(
+        'Suspicious Request while authenticating: user agent does not match client',
+      );
       res.status(401).send('Unauthorized');
       return;
     }
@@ -65,7 +70,7 @@ export const authMiddleware: RequestHandler = async (req, res, next) => {
       [newToken, newRefreshToken, clientId],
     );
   } catch (e) {
-    console.error(e);
+    logger.error(`AuthError: ${e}`);
     res.status(500).send('Internal server error');
     return;
   } finally {

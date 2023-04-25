@@ -1,6 +1,7 @@
 import { pgPool } from '../db';
 import bcrypt from 'bcrypt';
 import { RequestHandler } from 'express';
+import { logger } from '../logger';
 
 export const createUserHandler: RequestHandler = async (req, res, next) => {
   const { username, password, key } = req.body;
@@ -41,7 +42,7 @@ export const createUserHandler: RequestHandler = async (req, res, next) => {
     );
     req.userId = user.rows[0].id;
   } catch (e) {
-    console.error(e);
+    logger.error(`CreateUserError: ${e}`);
     res.status(500).send('Internal server error');
     return;
   } finally {
