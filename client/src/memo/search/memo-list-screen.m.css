@@ -73,4 +73,5 @@
 .search {
   display: inline-block;
   flex: 1 0 auto;
+  width: auto;
 }

@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  flex: 0 0 auto;
+}
+
+.content {
+  flex: 1 1 auto;
+  position: relative;
+  overflow: hidden;
+}

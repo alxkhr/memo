@@ -1,6 +1,6 @@
 # roadmap
 
-- mobile version
+- some better colors (delete dummy red)
 - server logs
 - test
   - sync with two connected devices
@@ -22,6 +22,7 @@
 - close the suggestions on esc and on choosing one (fixes new line after tag bug)
 - really responsive design
   - list beneath details on desktop
+  - suggestions not as dropdown on mobile, maybe over keyboard
 - semantic html
   - tags: ie. header, navigation
 - support more content types (links, drawings, photos, todo-list)
