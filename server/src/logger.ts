@@ -58,6 +58,7 @@ export const logger = winston.createLogger({
 });
 
 export const logRequest: RequestHandler = (req, res, next) => {
+  // TODO find the real ip and user id of the requester if exists (maybe only log on warn/error)
   const reqMessage = `${req.method}:${req.headers.host || 'unknown_host'}${
     req.url
   } by ${req.ip}`;
