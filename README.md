@@ -44,3 +44,5 @@ So, get ready to go nuts with your note-taking game! Welcome to "Headnut" - the 
 
 - not able to make new line after tag
 - undefined token on client after internal server error
+- ~umlaute in tags
+- tag background offset on mobile after linebreak?
