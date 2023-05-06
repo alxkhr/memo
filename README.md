@@ -46,3 +46,4 @@ So, get ready to go nuts with your note-taking game! Welcome to "Headnut" - the 
 - undefined token on client after internal server error
 - ~umlaute in tags
 - tag background offset on mobile after linebreak?
+- connecting after creating notes on multiple devices will not sync all notes
